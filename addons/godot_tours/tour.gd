@@ -681,11 +681,14 @@ func bubble_add_task_node_to_guide(parameters: Guide3DTaskParameters) -> void:
 	queue_command(func() -> void:
 		var scene_root := EditorInterface.get_edited_scene_root()
 		var guide := Guide3DPackedScene.instantiate()
-		guides[parameters.node_name] = guide
 		scene_root.add_child(guide)
+		guides[parameters.node_name] = guide
 		guide.global_position = parameters.global_position
 		guide.box_offset = parameters.box_offset
 		guide.size = parameters.box_size
+		guide.owner = scene_root
+		guide.name = "GDTourGuide"
+		guide.set_meta(&"_edit_lock_", true)
 	)
 	bubble_add_task(parameters.description_override, 1, func node_to_guide(_task: Task) -> int:
 		var scene_root := EditorInterface.get_edited_scene_root()
