@@ -96,29 +96,51 @@ func _process(delta: float) -> void:
 	refresh()
 
 
+
+enum State { IDLE, DRAGGING }
+
+var _state: State = State.IDLE
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and _state == State.DRAGGING:
+		var base_control := EditorInterface.get_base_control()
+		# Ensure the bubble stays within the editor's bounds
+		var new_position: Vector2 = panel_container.position + event.screen_relative
+		new_position.x = clampf(new_position.x, 0.0, base_control.size.x - panel_container.size.x)
+		new_position.y = clampf(new_position.y, 0.0, base_control.size.y - panel_container.size.y)
+		panel_container.position = new_position
+		was_moved = true
+
+	if (
+		_state == State.DRAGGING
+		and event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT
+		and not event.pressed
+	):
+		_state = State.IDLE
+
+
 func _on_panel_container_gui_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		return
+
 	var is_event_in_margin: bool = (
-		event is InputEventMouse
-		and (
-			event.position.y <= drag_margin
-			or event.position.y >= panel_container.size.y - drag_margin
-			or event.position.x <= drag_margin
-			or event.position.x >= panel_container.size.x - drag_margin
-		)
+		event.position.y <= drag_margin
+		or event.position.y >= panel_container.size.y - drag_margin
+		or event.position.x <= drag_margin
+		or event.position.x >= panel_container.size.x - drag_margin
 	)
 	panel_container.mouse_default_cursor_shape = (
 		Control.CURSOR_MOVE if is_event_in_margin else Control.CURSOR_ARROW
 	)
 
 	if (
-		event is InputEventMouseButton
-		and event.button_index == MOUSE_BUTTON_LEFT
+		event.button_index == MOUSE_BUTTON_LEFT
+		and event.pressed
 		and is_event_in_margin
 	):
-		is_left_click = event.pressed
-	elif event is InputEventMouseMotion and is_left_click:
-		panel_container.position += event.relative
-		was_moved = true
+		_state = State.DRAGGING
 
 
 ## [b]Virtual[/b] method for reacting to the tour step change. See ["addons/godot_tours/tour.gd"]
