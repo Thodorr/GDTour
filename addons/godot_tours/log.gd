@@ -17,6 +17,16 @@ func clean_up() -> void:
 	log_file.close()
 
 
+func flush() -> void:
+	log_file.flush()
+
+
+func reopen() -> FileAccess:
+	var result := FileAccess.open(LOG_FILE_PATH, FileAccess.READ_WRITE if FileAccess.file_exists(LOG_FILE_PATH) else FileAccess.WRITE)
+	result.seek_end()
+	return result
+
+
 func debug(msg: String) -> void:
 	write(Level.DEBUG, msg)
 
@@ -41,7 +51,7 @@ func write(level: Level, msg: String) -> void:
 	log_file.store_string(
 		"%s:%s: %s\n" % [Time.get_datetime_string_from_system(true), Level.keys()[level], msg]
 	)
-	log_file.flush()
+	flush()
 
 
 func get_info() -> Dictionary:

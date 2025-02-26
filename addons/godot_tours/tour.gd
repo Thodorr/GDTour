@@ -141,7 +141,7 @@ func load_bubble(BubblePackedScene: PackedScene = null) -> void:
 
 	bubble = BubblePackedScene.instantiate()
 	interface.base_control.add_child(bubble)
-	bubble.setup(translation_service, steps.size())
+	bubble.setup(log, translation_service, steps.size())
 	bubble.back_button_pressed.connect(back)
 	bubble.next_button_pressed.connect(next)
 	bubble.close_requested.connect(func() -> void:

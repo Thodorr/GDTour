@@ -17,6 +17,7 @@ const EditorInterfaceAccess := preload("../editor_interface_access.gd")
 const TranslationService := preload("../translation/translation_service.gd")
 const Debugger := preload("../debugger/debugger.gd")
 const ThemeUtils := preload("../ui/theme_utils.gd")
+const Log := preload("../log.gd")
 
 const TaskPackedScene: PackedScene = preload("task/task.tscn")
 
@@ -50,6 +51,10 @@ const GROW_DIRECTIONS := {
 	At.CENTER: {h = Control.GROW_DIRECTION_BOTH, v = Control.GROW_DIRECTION_BOTH},
 }
 
+var translation_service: TranslationService = null
+var step_count := 0  ## Tour step count.
+var log: Log = null
+
 var at := At.CENTER  ## Bubble location relative to a given Control node. See [enum At] for details.
 var avatar_at := AvatarAt.LEFT  ## Avatar location relative to the bubble. See [enum AvatarAt] for details.
 
@@ -58,8 +63,6 @@ var avatar_at := AvatarAt.LEFT  ## Avatar location relative to the bubble. See [
 var margin := 16.0
 var offset_vector := Vector2.ZERO  ## Custom offset for [method move_and_anchor] for extra control.
 var control: Control = null  ## Reference to the control node passed to [method move_and_anchor].
-var translation_service: TranslationService = null
-var step_count := 0  ## Tour step count.
 var drag_margin := 32.0 * EditorInterface.get_editor_scale()
 var is_left_click := false
 var was_moved := false
@@ -72,7 +75,8 @@ var avatar_tween_rotation: Tween = null
 @onready var avatar: Node2D = %Avatar
 
 
-func setup(translation_service: TranslationService, step_count: int) -> void:
+func setup(log: Log, translation_service: TranslationService, step_count: int) -> void:
+	self.log = log
 	self.translation_service = translation_service
 	self.step_count = step_count
 
@@ -94,7 +98,6 @@ func _process(delta: float) -> void:
 	# RichTextLabel nodes added to the bubble can cause it to resize after 0, 1, or 2 frames. It's not reliable
 	# and depends on the computer. So, it's best to refresh every frame.
 	refresh()
-
 
 
 enum State { IDLE, DRAGGING }
