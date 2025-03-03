@@ -232,10 +232,8 @@ func scene_select_nodes_by_path(paths: Array[String] = []) -> void:
 	scene_deselect_all_nodes()
 	queue_command(func() -> void:
 		var scene_root := EditorInterface.get_edited_scene_root()
-		var nodes := ([scene_root] if scene_root.name in paths else []) + Utils.find_children_by_path(scene_root, paths)
-		for node in nodes:
+		for node in Utils.find_children_by_path(scene_root, paths):
 			editor_selection.add_node(node)
-			EditorInterface.edit_node(node)
 	)
 
 
@@ -832,10 +830,10 @@ func highlight_spatial_editor_camera_region(start: Vector3, end: Vector3, index 
 		var rect_getter := func() -> Rect2:
 			var s := camera.unproject_position(start)
 			var e := camera.unproject_position(end)
-			return interface.spatial_editor_surface.get_global_rect().intersection(
+			return interface.spatial_editor.get_global_rect().intersection(
 				camera.get_viewport().get_screen_transform() * Rect2(Vector2(min(s.x, e.x), min(s.y, e.y)), (e - s).abs())
 			)
-		overlays.add_highlight_to_control(interface.spatial_editor_surface, rect_getter, play_flash),
+		overlays.add_highlight_to_control(interface.spatial_editor, rect_getter, play_flash),
 	)
 
 

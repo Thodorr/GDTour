@@ -68,7 +68,7 @@ var tween: Tween = null
 var avatar_tween_position: Tween = null
 var avatar_tween_rotation: Tween = null
 
-@onready var panel_container: PanelContainer = $PanelContainer
+@onready var panel_container: PanelContainer = %PanelContainer
 @onready var avatar: Node2D = %Avatar
 
 

@@ -13,12 +13,13 @@ var context_switcher: HBoxContainer = null
 var context_switcher_2d_button: Button = null
 var context_switcher_3d_button: Button = null
 var context_switcher_script_button: Button = null
+var context_switcher_game_button: Button = null
 var context_switcher_asset_lib_button: Button = null
+
 var run_bar: MarginContainer = null
 var run_bar_play_button: Button = null
 var run_bar_pause_button: Button = null
 var run_bar_stop_button: Button = null
-var run_bar_debug_button: MenuButton = null
 var run_bar_play_current_button: Button = null
 var run_bar_play_custom_button: Button = null
 var run_bar_movie_mode_button: Button = null
@@ -214,29 +215,27 @@ func _init() -> void:
 	context_switcher_2d_button = context_switcher_buttons[0]
 	context_switcher_3d_button = context_switcher_buttons[1]
 	context_switcher_script_button = context_switcher_buttons[2]
-	context_switcher_asset_lib_button = context_switcher_buttons[3]
+	context_switcher_game_button = context_switcher_buttons[3]
+	context_switcher_asset_lib_button = context_switcher_buttons[4]
 
 	run_bar = Utils.find_child_by_type(editor_title_bar, "EditorRunBar")
-	var run_bar_buttons = run_bar.find_children("", "Button", true, false)
-	run_bar_play_button = run_bar_buttons[0]
-	run_bar_pause_button = run_bar_buttons[1]
-	run_bar_stop_button = run_bar_buttons[2]
-	run_bar_debug_button = run_bar_buttons[3]
-	run_bar_play_current_button = run_bar_buttons[7]
-	run_bar_play_custom_button = run_bar_buttons[8]
-	run_bar_movie_mode_button = run_bar_buttons[9]
+	var run_bar_buttons = Utils.find_child_by_type(run_bar.get_child(0), "HBoxContainer").find_children("", "Button", true, false)
+	# TODO: Find a better way to check for C# engine instead of using scripting language count
+	var offset := (Engine.get_script_language_count() - 1) % 2
+	run_bar_play_button = run_bar_buttons[0 + offset]
+	run_bar_pause_button = run_bar_buttons[1 + offset]
+	run_bar_stop_button = run_bar_buttons[2 + offset]
+	run_bar_play_current_button = run_bar_buttons[-3]
+	run_bar_play_custom_button = run_bar_buttons[-2]
+	run_bar_movie_mode_button = run_bar_buttons[-1]
 	rendering_options = Utils.find_child_by_type(editor_title_bar, "OptionButton")
 
 	# Main Screen
 	main_screen = EditorInterface.get_editor_main_screen()
 	main_screen_tabs = Utils.find_child_by_type(main_screen.get_parent().get_parent(), "TabBar")
-	distraction_free_button = (
-		main_screen_tabs.get_parent().find_children("", "Button", true, false).back()
-	)
+	distraction_free_button = main_screen_tabs.get_parent().find_children("", "Button", true, false).back()
 	canvas_item_editor = Utils.find_child_by_type(main_screen, "CanvasItemEditor")
-	canvas_item_editor_viewport = Utils.find_child_by_type(
-		canvas_item_editor, "CanvasItemEditorViewport"
-	)
+	canvas_item_editor_viewport = Utils.find_child_by_type(canvas_item_editor, "CanvasItemEditorViewport")
 	canvas_item_editor_toolbar = canvas_item_editor.get_child(0).get_child(0).get_child(0)
 	var canvas_item_editor_toolbar_buttons := canvas_item_editor_toolbar.find_children(
 		"", "Button", false, false
@@ -396,9 +395,7 @@ func _init() -> void:
 	)
 	shader = Utils.find_child_by_type(bottom_panels_vboxcontainer, "WindowWrapper", false)
 	var editor_toaster := Utils.find_child_by_type(bottom_panels_vboxcontainer, "EditorToaster")
-	bottom_buttons_container = Utils.find_child_by_type(
-		editor_toaster.get_parent(), "HBoxContainer", false
-	)
+	bottom_buttons_container = Utils.find_child_by_type(Utils.find_child_by_type(editor_toaster.get_parent(), "ScrollContainer", false), "HBoxContainer", false)
 
 	var bottom_button_children := bottom_buttons_container.get_children()
 	bottom_button_output = bottom_button_children[0]

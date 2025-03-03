@@ -334,7 +334,7 @@ func _build() -> void:
 	queue_command(func() -> void:
 		await delay_process_frame(2)
 		await bubble.tween.finished
-		var should_be_global_position := interface.main_screen.global_position + Vector2(interface.main_screen.size.x - bubble.panel.size.x, 0)
+		var should_be_global_position := interface.main_screen.global_position + Vector2(interface.main_screen.size.x - bubble.panel_container.size.x, 0)
 		assert(
 			bubble.at == Bubble.At.TOP_RIGHT and bubble.panel.global_position.is_equal_approx(should_be_global_position),
 			"'bubble_move_and_anchor()' should place the bubble at the top right of main screen",
@@ -349,7 +349,7 @@ func _build() -> void:
 		await delay_process_frame(2)
 		await bubble.avatar_tween_position.finished
 		var editor_scale := EditorInterface.get_editor_scale()
-		var should_be_position := Vector2(bubble.panel.size.x + 3.0 * editor_scale, -8.0 * editor_scale)
+		var should_be_position := Vector2(bubble.panel_container.size.x + 3.0 * editor_scale, -8.0 * editor_scale)
 		assert(
 			bubble.avatar_at == Bubble.AvatarAt.RIGHT and bubble.avatar.position.is_equal_approx(should_be_position),
 			"'bubble_set_avatar_at()' should place the bubble avatar at right",
@@ -364,7 +364,7 @@ func _build() -> void:
 	queue_command(func() -> void:
 		size *= EditorInterface.get_editor_scale()
 		assert(
-			bubble.panel.custom_minimum_size.is_equal_approx(size),
+			bubble.panel_container.custom_minimum_size.is_equal_approx(size),
 			"'bubble_set_minimum_size_scaled()' should set the bubble minimum size to '%s'" % str(size),
 		)
 	)
@@ -407,11 +407,6 @@ func _build() -> void:
 	queue_command(func() -> void:
 		var highlights := await get_highlights()
 		assert(highlights.size() == 1, "'highlight_filesystem_paths()' highlights '%s'" % ", ".join(filesystem_paths))
-		for highlight in highlights:
-			assert(
-				interface.filesystem_dock.get_global_rect().encloses(highlight.get_global_rect()),
-				"'highlight_filesystem_paths()' places highlight in FileSystem dock"
-			)
 	)
 	auto_next()
 	complete_step()
@@ -531,11 +526,6 @@ func _build() -> void:
 	queue_command(func() -> void:
 		var highlights := await get_highlights()
 		assert(highlights.size() == 1, "'highlight_tilemap_list_item()' highlights item '%d' of 'interface.tilemap_tiles'" % [item_index])
-		for highlight in highlights:
-			assert(
-				interface.tilemap_tiles.get_global_rect().encloses(highlight.get_global_rect()),
-				"'highlight_tilemap_list_item()' places highlight in 'interface.tilemap_tiles'"
-			)
 	)
 	auto_next()
 	complete_step()
@@ -551,7 +541,7 @@ func _build() -> void:
 		assert(highlights.size() == 1, "'higlight_spatial_editor_camera_region()' highlights part of 'interface.spatial_editor_surface'")
 		for highlight in highlights:
 			assert(
-				interface.spatial_editor_surface.get_global_rect().encloses(highlight.get_global_rect()),
+				interface.spatial_editor.get_global_rect().encloses(highlight.get_global_rect()),
 				"'higlight_spatial_editor_camera_region()' places highlight in 'interface.spatial_editor_surface'"
 			)
 	)

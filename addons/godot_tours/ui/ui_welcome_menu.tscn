@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bhu2wc07q7fxk"]
 
-[ext_resource type="Script" path="res://addons/godot_tours/ui/ui_welcome_menu.gd" id="1_kfmbk"]
+[ext_resource type="Script" uid="uid://bx5iqc8vdroml" path="res://addons/godot_tours/ui/ui_welcome_menu.gd" id="1_kfmbk"]
 [ext_resource type="Theme" uid="uid://7hcgepakmhxl" path="res://addons/godot_tours/ui/theme_welcome_menu.tres" id="2_0icf0"]
 [ext_resource type="Texture2D" uid="uid://cb4s7cxc5wtdv" path="res://addons/godot_tours/assets/icons/reload.svg" id="3_rgtlm"]
 
