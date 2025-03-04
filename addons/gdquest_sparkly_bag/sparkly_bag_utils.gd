@@ -161,6 +161,6 @@ static func check_godot_files(dir_path: String) -> ReturnCode:
 		print_rich(path)
 		result = os_execute("godot", args)
 		if result != ReturnCode.OK:
-			print_rich("[color=red]ERROR[/color]")
+			break
 	return result
 

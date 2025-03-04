@@ -407,6 +407,12 @@ func _build() -> void:
 	queue_command(func() -> void:
 		var highlights := await get_highlights()
 		assert(highlights.size() == 1, "'highlight_filesystem_paths()' highlights '%s'" % ", ".join(filesystem_paths))
+		for highlight in highlights:
+			assert(
+				interface.filesystem_dock.get_global_rect().encloses(highlight.get_global_rect()),
+				"'highlight_filesystem_paths()' places highlight in FileSystem dock"
+			)
+
 	)
 	auto_next()
 	complete_step()
@@ -526,6 +532,11 @@ func _build() -> void:
 	queue_command(func() -> void:
 		var highlights := await get_highlights()
 		assert(highlights.size() == 1, "'highlight_tilemap_list_item()' highlights item '%d' of 'interface.tilemap_tiles'" % [item_index])
+		for highlight in highlights:
+			assert(
+				interface.tilemap_tiles.get_global_rect().encloses(highlight.get_global_rect()),
+				"'highlight_tilemap_list_item()' places highlight in 'interface.tilemap_tiles'"
+			)
 	)
 	auto_next()
 	complete_step()
