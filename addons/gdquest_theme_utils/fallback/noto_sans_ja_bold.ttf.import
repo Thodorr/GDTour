@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dmo87fdm7i0rd"
-path="res://.godot/imported/noto_sans_ja_bold.ttf-88e1b4266f12cb9da0eb807ce9d483d1.fontdata"
+uid="uid://bchv6ye2hclqk"
+path="res://.godot/imported/noto_sans_ja_bold.ttf-bd071ff220c9239ba6c280401abd2441.fontdata"
 
 [deps]
 
-source_file="res://addons/godot_tours/assets/fonts/fallback/noto_sans_ja_bold.ttf"
-dest_files=["res://.godot/imported/noto_sans_ja_bold.ttf-88e1b4266f12cb9da0eb807ce9d483d1.fontdata"]
+source_file="res://addons/gdquest_theme_utils/fallback/noto_sans_ja_bold.ttf"
+dest_files=["res://.godot/imported/noto_sans_ja_bold.ttf-bd071ff220c9239ba6c280401abd2441.fontdata"]
 
 [params]
 
@@ -22,7 +22,7 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
-subpixel_positioning=1
+subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null

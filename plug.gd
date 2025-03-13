@@ -3,4 +3,4 @@ extends "res://addons/gd-plug/plug.gd"
 
 
 func _plugging() -> void:
-	plug("git@github.com:GDQuest/godot-addons.git", {include = ["addons/gdquest_sparkly_bag"]})
+	plug("git@github.com:GDQuest/godot-addons.git", {include = ["addons/gdquest_sparkly_bag", "addons/gdquest_theme_utils"]})

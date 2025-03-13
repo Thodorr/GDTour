@@ -2,7 +2,7 @@
 @tool
 
 const FALLBACK_FONT_LANGUAGES := ["ja"]
-const FALLBACK_FONT_FMT := "res://addons/godot_tours/assets/fonts/fallback/noto_sans%s_%s.ttf"
+const FALLBACK_FONT_FMT := "res://addons/gdquest_theme_utils/fallback/noto_sans%s_%s.ttf"
 const FALLBACK_FONT_MAP := {
 	"bold_font": "bold",
 	"italics_font": "italic",
@@ -83,11 +83,16 @@ static func generate_scaled_theme(theme_resource: Theme) -> Theme:
 				stylebox.shadow_offset *= editor_scale
 				stylebox.shadow_size *= editor_scale
 
+			if stylebox is StyleBoxFlat or stylebox is StyleBoxTexture:
 				stylebox.content_margin_left *= editor_scale
 				stylebox.content_margin_right *= editor_scale
 				stylebox.content_margin_top *= editor_scale
 				stylebox.content_margin_bottom *= editor_scale
 
+				stylebox.expand_margin_left *= editor_scale
+				stylebox.expand_margin_right *= editor_scale
+				stylebox.expand_margin_top *= editor_scale
+				stylebox.expand_margin_bottom *= editor_scale
 	return new_theme
 
 

@@ -7,7 +7,7 @@ signal tour_reset_requested(tour_path: String)
 ## Emitted when the menu is closed.
 signal closed
 
-const ThemeUtils := preload("theme_utils.gd")
+const ThemeUtils := preload("res://addons/gdquest_theme_utils/theme_utils.gd")
 const UISelectableTour = preload("ui_selectable_tour.gd")
 const GodotTourEntry = preload("../godot_tour_entry.gd")
 const GodotTourList = preload("../godot_tour_list.gd")
@@ -95,8 +95,10 @@ func setup(translation_service: TranslationService, tour_list: GodotTourList) ->
 		var editor_scale := EditorInterface.get_editor_scale()
 		panel_container.custom_minimum_size.x *= editor_scale
 		ThemeUtils.scale_margin_container_margins(margin_container)
-		for button: BaseButton in [button_reset_selected, button_reset_no, button_reset_yes, button_reset_ok, button_start_learning]:
+		for button: BaseButton in [button_close, button_reset_selected, button_reset_no, button_reset_yes, button_reset_ok, button_start_learning]:
 			button.custom_minimum_size *= editor_scale
+		for color_rect: ColorRect in button_close.get_children():
+			color_rect.scale = editor_scale * Vector2.ONE
 
 	if tours_column.get_child_count() > 0:
 		tours_column.get_child(0).select()
