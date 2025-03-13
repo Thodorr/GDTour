@@ -140,7 +140,7 @@ theme_type_variation = &"ResetButton"
 shortcut_in_tooltip = false
 text = "OK"
 
-[node name="ButtonClose" type="Button" parent="Control/PanelContainer"]
+[node name="ButtonClose" type="Button" parent="Control/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -150,7 +150,7 @@ mouse_default_cursor_shape = 2
 theme_type_variation = &"CloseButton"
 flat = true
 
-[node name="ColorRect" type="ColorRect" parent="Control/PanelContainer/ButtonClose"]
+[node name="ColorRect" type="ColorRect" parent="Control/PanelContainer/MarginContainer/ButtonClose"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -167,7 +167,7 @@ rotation = 0.785398
 pivot_offset = Vector2(20, 3)
 mouse_filter = 2
 
-[node name="ColorRect2" type="ColorRect" parent="Control/PanelContainer/ButtonClose"]
+[node name="ColorRect2" type="ColorRect" parent="Control/PanelContainer/MarginContainer/ButtonClose"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
