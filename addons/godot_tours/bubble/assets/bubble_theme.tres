@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=21 format=3 uid="uid://cx2cxgbadh7fg"]
+[gd_resource type="Theme" load_steps=23 format=3 uid="uid://cx2cxgbadh7fg"]
 
 [ext_resource type="FontFile" uid="uid://cja70uk8veutj" path="res://addons/godot_tours/assets/fonts/open_sans.ttf" id="1_lfodo"]
 [ext_resource type="FontFile" uid="uid://cxeo2n3ky21xb" path="res://addons/godot_tours/assets/fonts/mukta_bold.ttf" id="2_dcrkv"]
@@ -10,12 +10,20 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gpssp"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p73dq"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xip3"]
 bg_color = Color(0.0862745, 0.141176, 0.282353, 1)
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bnv2w"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k4f4m"]
 content_margin_left = 10.0
@@ -122,21 +130,27 @@ default_font_size = 16
 BottomButton/base_type = &"Button"
 BottomButton/styles/focus = SubResource("StyleBoxEmpty_gpssp")
 BottomHBoxContainer/base_type = &"HBoxContainer"
-BottomHBoxContainer/constants/separation = 10
-BottomMarginContainer/base_type = &"MarginContainer"
-BottomMarginContainer/constants/margin_bottom = 7
-BottomMarginContainer/constants/margin_left = 10
-BottomMarginContainer/constants/margin_right = 10
-BottomMarginContainer/constants/margin_top = 2
+BottomHBoxContainer/constants/separation = 60
+BottomMarginPanelContainer/base_type = &"PanelContainer"
+BottomMarginPanelContainer/styles/panel = SubResource("StyleBoxEmpty_p73dq")
 BottomPanelContainer/base_type = &"PanelContainer"
 BottomPanelContainer/styles/panel = SubResource("StyleBoxFlat_4xip3")
 BottomRichTextLabel/base_type = &"RichTextLabel"
 BottomRichTextLabel/colors/default_color = Color(0.396078, 0.733333, 0.960784, 1)
 BottomRichTextLabel/font_sizes/normal_font_size = 14
 BottomRichTextLabel/fonts/normal_font = ExtResource("1_lfodo")
+BoxButton/base_type = &"NextButton"
+BoxButton/colors/font_color = Color(0.415686, 0.0980392, 0, 1)
+BoxButton/colors/font_disabled_color = Color(0.415686, 0.0980392, 0, 1)
+BoxButton/colors/font_focus_color = Color(0.415686, 0.0980392, 0, 1)
+BoxButton/colors/font_hover_color = Color(0.415686, 0.0980392, 0, 1)
+BoxButton/colors/font_hover_pressed_color = Color(0.415686, 0.0980392, 0, 1)
+BoxButton/colors/font_pressed_color = Color(0.415686, 0.0980392, 0, 1)
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/font_sizes/font_size = 16
 Button/fonts/font = ExtResource("2_dcrkv")
+ButtonsPanelContainer/base_type = &"PanelContainer"
+ButtonsPanelContainer/styles/panel = SubResource("StyleBoxEmpty_bnv2w")
 ErrorLabel/base_type = &"Label"
 ErrorLabel/colors/font_color = Color(1, 0.541176, 0, 1)
 FooterRichTextLabel/base_type = &"RichTextLabel"
@@ -158,7 +172,7 @@ MainMarginContainer/constants/margin_left = 32
 MainMarginContainer/constants/margin_right = 32
 MainMarginContainer/constants/margin_top = 32
 MainVBoxContainer/base_type = &"VBoxContainer"
-MainVBoxContainer/constants/separation = 0
+MainVBoxContainer/constants/separation = 12
 MarginContainer/constants/margin_bottom = 16
 MarginContainer/constants/margin_left = 16
 MarginContainer/constants/margin_right = 16
@@ -178,6 +192,10 @@ NextButton/styles/pressed = SubResource("StyleBoxFlat_nfk3i")
 OutlinePanelContainer/base_type = &"PanelContainer"
 OutlinePanelContainer/styles/panel = SubResource("StyleBoxFlat_ht4iy")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_7nwh6")
+PrimaryVBoxContainer/base_type = &"VBoxContainer"
+PrimaryVBoxContainer/constants/separation = 0
+ProgressLostLabel/base_type = &"Label"
+ProgressLostLabel/fonts/font = ExtResource("6_k0qw8")
 RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
 RichTextLabel/font_sizes/bold_font_size = 16
 RichTextLabel/font_sizes/bold_italics_font_size = 16

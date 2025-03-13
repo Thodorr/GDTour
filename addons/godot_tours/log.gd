@@ -2,7 +2,7 @@
 ## Use this log file for debugging purposes when users report errors.
 extends RefCounted
 
-const LOG_FILE_PATH := "res://godot_tours.log"
+const LOG_FILE_PATH := "user://tour.log"
 
 enum Level {DEBUG, INFO, WARN, ERROR, FATAL}
 

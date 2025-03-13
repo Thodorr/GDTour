@@ -400,8 +400,8 @@ func _init() -> void:
 	var bottom_button_children := bottom_buttons_container.get_children()
 	bottom_button_output = bottom_button_children[0]
 	bottom_button_debugger = bottom_button_children[1]
-	bottom_button_tileset = bottom_button_children[-3]
-	bottom_button_tilemap = bottom_button_children[-2]
+	bottom_button_tileset = bottom_button_children[-5]
+	bottom_button_tilemap = bottom_button_children[-4]
 	bottom_buttons = [
 		bottom_button_output, bottom_button_debugger, bottom_button_tileset, bottom_button_tilemap
 	]

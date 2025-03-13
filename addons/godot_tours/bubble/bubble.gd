@@ -51,6 +51,7 @@ const GROW_DIRECTIONS := {
 	At.CENTER: {h = Control.GROW_DIRECTION_BOTH, v = Control.GROW_DIRECTION_BOTH},
 }
 
+var interface: EditorInterfaceAccess = null
 var translation_service: TranslationService = null
 var step_count := 0  ## Tour step count.
 var log: Log = null
@@ -66,6 +67,7 @@ var control: Control = null  ## Reference to the control node passed to [method 
 var drag_margin := 32.0 * EditorInterface.get_editor_scale()
 var is_left_click := false
 var was_moved := false
+var editor_scale := 1.0
 
 var tween: Tween = null
 var avatar_tween_position: Tween = null
@@ -75,7 +77,8 @@ var avatar_tween_rotation: Tween = null
 @onready var avatar: Node2D = %Avatar
 
 
-func setup(log: Log, translation_service: TranslationService, step_count: int) -> void:
+func setup(interface: EditorInterfaceAccess, log: Log, translation_service: TranslationService, step_count: int) -> void:
+	self.interface = interface
 	self.log = log
 	self.translation_service = translation_service
 	self.step_count = step_count
@@ -86,7 +89,7 @@ func _ready() -> void:
 		return
 
 	panel_container.gui_input.connect(_on_panel_container_gui_input)
-	var editor_scale := EditorInterface.get_editor_scale()
+	editor_scale = EditorInterface.get_editor_scale()
 	panel_container.custom_minimum_size *= editor_scale
 	if panel_container.theme:
 		panel_container.theme = ThemeUtils.request_fallback_font(panel_container.theme)

@@ -140,8 +140,8 @@ func load_bubble(BubblePackedScene: PackedScene = null) -> void:
 		BubblePackedScene = load("res://addons/godot_tours/bubble/default_bubble.tscn")
 
 	bubble = BubblePackedScene.instantiate()
+	bubble.setup(interface, log, translation_service, steps.size())
 	interface.base_control.add_child(bubble)
-	bubble.setup(log, translation_service, steps.size())
 	bubble.back_button_pressed.connect(back)
 	bubble.next_button_pressed.connect(next)
 	bubble.close_requested.connect(func() -> void:
@@ -968,7 +968,6 @@ func get_tree_item_center_by_path(tree: Tree, path: String, button_index := -1) 
 		return result
 	for item in Utils.filter_tree_items(root, func(ti: TreeItem) -> bool: return path == Utils.get_tree_item_path(ti)):
 		var rect := tree.get_global_transform() * tree.get_item_area_rect(item, 0, button_index)
-		rect.position -= tree.get_scroll()
 		result = rect.get_center()
 		break
 	return result
@@ -982,7 +981,6 @@ func get_tree_item_center_by_name(tree: Tree, name: String) -> Vector2:
 
 	var item := Utils.find_tree_item_by_name(tree, name)
 	var rect := tree.get_global_transform() * tree.get_item_area_rect(item, 0)
-	rect.position -= tree.get_scroll()
 	result = rect.get_center()
 	return result
 

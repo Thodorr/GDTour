@@ -69,9 +69,10 @@ var regex_class := RegEx.new()
 @onready var bottom_panel_container: PanelContainer = %BottomPanelContainer
 @onready var step_count_label: Label = %StepCountLabel
 @onready var info_v_box_container: VBoxContainer = %InfoVBoxContainer
+@onready var info_texture_rect: TextureRect = %InfoTextureRect
 @onready var info_rich_text_label: RichTextLabel = %InfoRichTextLabel
 
-@onready var buttons_margin_container: MarginContainer = %ButtonsMarginContainer
+@onready var bottom_h_box_container: HBoxContainer = %BottomHBoxContainer
 @onready var help_button: Button = %HelpButton
 @onready var help_rich_text_label: RichTextLabel = %HelpRichTextLabel
 @onready var skip_button: Button = %SkipButton
@@ -85,12 +86,18 @@ var regex_class := RegEx.new()
 @onready var close_info_button: Button = %CloseInfoButton
 @onready var find_log_button: Button = %FindLogButton
 
-func setup(log: Log, translation_service: TranslationService, step_count: int) -> void:
-	super(log, translation_service, step_count)
 
+func setup(interface: EditorInterfaceAccess, log: Log, translation_service: TranslationService, step_count: int) -> void:
+	super(interface, log, translation_service, step_count)
 	var classes := Array(ClassDB.get_class_list())
 	classes.sort_custom(func(a: String, b: String) -> bool: return a.length() > b.length())
 	regex_class.compile(r"\[b\](%s)\[\/b\]" % "|".join(classes))
+
+
+func _ready() -> void:
+	super()
+	if not Engine.is_editor_hint() or EditorInterface.get_edited_scene_root() == self:
+		return
 
 	update_step_count_display(0)
 	Utils.update_locale(translation_service, {
@@ -107,12 +114,6 @@ func setup(log: Log, translation_service: TranslationService, step_count: int) -
 		try_again_button: {text = "TRY AGAIN"},
 		info_rich_text_label: {text = COMMIT_MESSAGE},
 	})
-
-
-func _ready() -> void:
-	super()
-	if not Engine.is_editor_hint() or EditorInterface.get_edited_scene_root() == self:
-		return
 
 	# Clear tasks etc. in case we have some for testing in the scene.
 	clear_elements_and_tasks()
@@ -139,16 +140,17 @@ func _ready() -> void:
 	for node in [header_rich_text_label, main_v_box_container, tasks_v_box_container, footer_rich_text_label, footer_spacer]:
 		node.visible = false
 
-	var editor_scale := EditorInterface.get_editor_scale()
 	button_close.custom_minimum_size *= editor_scale
 	paragraph_separation *= editor_scale
+	info_texture_rect.custom_minimum_size.x *= editor_scale
 
 
 func _on_next_button_pressed() -> void:
 	if next_button.theme_type_variation == "GrayButton":
 		Utils.update_locale(translation_service, {info_rich_text_label: {text = COMMIT_MESSAGE}})
+		info_rich_text_label.custom_minimum_size.y = 170.0 * editor_scale
 		buttons_panel_container.visible = false
-		buttons_margin_container.visible = false
+		bottom_h_box_container.visible = false
 
 		info_v_box_container.visible = true
 		commit_h_box_container.visible = true
@@ -159,8 +161,9 @@ func _on_next_button_pressed() -> void:
 
 func _on_help_button_pressed() -> void:
 	Utils.update_locale(translation_service, {info_rich_text_label: {text = LOG_MESSAGE}})
+	info_rich_text_label.custom_minimum_size.y = 300.0 / editor_scale
 	buttons_panel_container.visible = false
-	buttons_margin_container.visible = false
+	bottom_h_box_container.visible = false
 
 	info_v_box_container.visible = true
 	commit_h_box_container.visible = false
@@ -180,7 +183,7 @@ func _on_find_log_button_pressed() -> void:
 
 func _close_info() -> void:
 	buttons_panel_container.visible = true
-	buttons_margin_container.visible = true
+	bottom_h_box_container.visible = true
 	info_v_box_container.visible = false
 
 
@@ -193,7 +196,6 @@ func on_tour_step_changed(index: int) -> void:
 	close_texture_rect.modulate = Color.WHITE
 	if index == 0:
 		back_button.visible = false
-		# next_button.visible = tasks_v_box_container.get_children().filter(func(n: Node) -> bool: return not n.is_queued_for_deletion()).size() == 0
 		next_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER | Control.SIZE_EXPAND
 		next_button.theme_type_variation = "NextButton"
 	elif index == step_count - 1:
@@ -300,7 +302,6 @@ func set_background(texture: Texture2D) -> void:
 func check_tasks() -> bool:
 	var are_tasks_done := tasks_v_box_container.get_children().filter(func(task: Task) -> bool: return not task.is_queued_for_deletion()).all(func(task: Task) -> bool: return task.is_done())
 	next_button.theme_type_variation = "GrayButton"
-	# next_button.visible = are_tasks_done
 	if are_tasks_done:
 		next_button.theme_type_variation = "NextButton"
 		avatar.do_wink()

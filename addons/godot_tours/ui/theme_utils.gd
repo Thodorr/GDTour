@@ -22,11 +22,14 @@ static func scale_font_size(text_node: Control) -> void:
 
 ## Gets and scales the margins of the input margin_container using the editor scale.
 ## Adds a theme constant override for each margin property directly.
-static func scale_margin_container_margins(margin_container: MarginContainer) -> void:
+static func scale_margin_container_margins(margin_container: MarginContainer, extra_scale: Dictionary[String, float] = {}) -> void:
 	var editor_scale := EditorInterface.get_editor_scale()
+	if is_equal_approx(editor_scale, 1.0):
+		return
+
 	for property in ["margin_left", "margin_right", "margin_top", "margin_bottom"]:
 		var margin: int = margin_container.get_theme_constant(property)
-		margin_container.add_theme_constant_override(property, margin * editor_scale)
+		margin_container.add_theme_constant_override(property, margin * editor_scale * extra_scale.get(property, 1.0))
 
 
 ## Returns a new theme object, a deep copy of theme_resource, with properties scaled
