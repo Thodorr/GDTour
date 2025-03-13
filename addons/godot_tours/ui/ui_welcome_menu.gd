@@ -7,13 +7,13 @@ signal tour_reset_requested(tour_path: String)
 ## Emitted when the menu is closed.
 signal closed
 
-const ThemeUtils := preload("res://addons/gdquest_theme_utils/theme_utils.gd")
 const UISelectableTour = preload("ui_selectable_tour.gd")
 const GodotTourEntry = preload("../godot_tour_entry.gd")
 const GodotTourList = preload("../godot_tour_list.gd")
 const Tour := preload("../tour.gd")
 const Utils := preload("../utils.gd")
 const TranslationService := preload("../translation/translation_service.gd")
+const ThemeUtils := preload("../../gdquest_theme_utils/theme_utils.gd")
 
 const UISelectableTourPackedScene = preload("ui_selectable_tour.tscn")
 

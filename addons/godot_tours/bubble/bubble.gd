@@ -12,12 +12,12 @@ signal close_requested
 ## Emitted when the user confirms wanting to finish the tour (for example, when they finish the last step).
 signal finish_requested
 
-const ThemeUtils := preload("res://addons/gdquest_theme_utils/theme_utils.gd")
 const Task := preload("task/task.gd")
 const EditorInterfaceAccess := preload("../editor_interface_access.gd")
 const TranslationService := preload("../translation/translation_service.gd")
 const Debugger := preload("../debugger/debugger.gd")
 const Log := preload("../log.gd")
+const ThemeUtils := preload("../../gdquest_theme_utils/theme_utils.gd")
 
 const TaskPackedScene: PackedScene = preload("task/task.tscn")
 
