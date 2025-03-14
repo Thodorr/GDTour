@@ -23,6 +23,9 @@ func _build() -> void:
 	complete_step()
 
 	swap_bubble()
+	queue_command(func() -> void:
+		bubble.is_debug = true
+	)
 	auto_next()
 	complete_step()
 

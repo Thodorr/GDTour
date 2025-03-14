@@ -51,6 +51,8 @@ const GROW_DIRECTIONS := {
 	At.CENTER: {h = Control.GROW_DIRECTION_BOTH, v = Control.GROW_DIRECTION_BOTH},
 }
 
+var is_debug := false
+
 var interface: EditorInterfaceAccess = null
 var translation_service: TranslationService = null
 var step_count := 0  ## Tour step count.
@@ -152,6 +154,8 @@ func _on_panel_container_gui_input(event: InputEvent) -> void:
 ## [b]Virtual[/b] method for reacting to the tour step change. See ["addons/godot_tours/tour.gd"]
 ## [code]step_changed[/code] signal for details.
 func on_tour_step_changed(index: int) -> void:
+	if is_debug:
+		print_debug("TOUR STEP: ", index)
 	was_moved = false
 
 

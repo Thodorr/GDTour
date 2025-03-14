@@ -18,6 +18,14 @@ config/icon="res://icon.png"
 
 project/assembly_name="Godot Tours - GDQuest"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_tours/plugin.cfg")
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://addons/godot_tours/tour.gd", "res://tours/test_tour/test_tour.gd")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
