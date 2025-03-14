@@ -278,10 +278,10 @@ func set_avatar_at(at := AvatarAt.LEFT) -> void:
 ## Refreshes the position and size of the bubble and its avatar as necessary.
 ## Called in [method Node._process].
 func refresh() -> void:
+	panel_container.reset_size()
 	if was_moved or control == null:
 		return
 
-	panel_container.reset_size()
 	var at_offset := {
 		At.TOP_LEFT: margin * Vector2.ONE,
 		At.TOP_CENTER:
