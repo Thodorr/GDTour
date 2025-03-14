@@ -122,6 +122,7 @@ func clean_up() -> void:
 
 
 func set_index(value: int) -> void:
+	log.reopen()
 	var step_count := steps.size()
 	var stride := Direction.BACK if value < index else Direction.NEXT
 	value = clampi(value, -1, step_count)

@@ -199,6 +199,7 @@ var windows: Array[ConfirmationDialog] = []
 
 
 func _init() -> void:
+	var language_offset := (Engine.get_script_language_count() - 1) % 2
 	base_control = EditorInterface.get_base_control()
 
 	# Top
@@ -221,10 +222,9 @@ func _init() -> void:
 	run_bar = Utils.find_child_by_type(editor_title_bar, "EditorRunBar")
 	var run_bar_buttons = Utils.find_child_by_type(run_bar.get_child(0), "HBoxContainer").find_children("", "Button", true, false)
 	# TODO: Find a better way to check for C# engine instead of using scripting language count
-	var offset := (Engine.get_script_language_count() - 1) % 2
-	run_bar_play_button = run_bar_buttons[0 + offset]
-	run_bar_pause_button = run_bar_buttons[1 + offset]
-	run_bar_stop_button = run_bar_buttons[2 + offset]
+	run_bar_play_button = run_bar_buttons[0 + language_offset]
+	run_bar_pause_button = run_bar_buttons[1 + language_offset]
+	run_bar_stop_button = run_bar_buttons[2 + language_offset]
 	run_bar_play_current_button = run_bar_buttons[-3]
 	run_bar_play_custom_button = run_bar_buttons[-2]
 	run_bar_movie_mode_button = run_bar_buttons[-1]
@@ -400,8 +400,8 @@ func _init() -> void:
 	var bottom_button_children := bottom_buttons_container.get_children()
 	bottom_button_output = bottom_button_children[0]
 	bottom_button_debugger = bottom_button_children[1]
-	bottom_button_tileset = bottom_button_children[-5]
-	bottom_button_tilemap = bottom_button_children[-4]
+	bottom_button_tileset = bottom_button_children[-4 - language_offset]
+	bottom_button_tilemap = bottom_button_children[-3 - language_offset]
 	bottom_buttons = [
 		bottom_button_output, bottom_button_debugger, bottom_button_tileset, bottom_button_tilemap
 	]

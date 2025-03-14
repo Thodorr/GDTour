@@ -21,10 +21,11 @@ func flush() -> void:
 	log_file.flush()
 
 
-func reopen() -> FileAccess:
-	var result := FileAccess.open(LOG_FILE_PATH, FileAccess.READ_WRITE if FileAccess.file_exists(LOG_FILE_PATH) else FileAccess.WRITE)
-	result.seek_end()
-	return result
+func reopen() -> void:
+	if log_file.is_open():
+		return
+	log_file = FileAccess.open(LOG_FILE_PATH, FileAccess.READ_WRITE if FileAccess.file_exists(LOG_FILE_PATH) else FileAccess.WRITE)
+	log_file.seek_end()
 
 
 func debug(msg: String) -> void:

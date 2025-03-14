@@ -140,8 +140,8 @@ func _ready() -> void:
 	for node in [header_rich_text_label, main_v_box_container, tasks_v_box_container, footer_rich_text_label, footer_spacer]:
 		node.visible = false
 
-	button_close.custom_minimum_size *= editor_scale
 	paragraph_separation *= editor_scale
+	button_close.custom_minimum_size *= editor_scale
 	info_texture_rect.custom_minimum_size.x *= editor_scale
 
 
@@ -161,7 +161,7 @@ func _on_next_button_pressed() -> void:
 
 func _on_help_button_pressed() -> void:
 	Utils.update_locale(translation_service, {info_rich_text_label: {text = LOG_MESSAGE}})
-	info_rich_text_label.custom_minimum_size.y = 300.0 / editor_scale
+	info_rich_text_label.custom_minimum_size.y = interface.base_control.size.y - panel_container.size.y - 300.0 / editor_scale
 	buttons_panel_container.visible = false
 	bottom_h_box_container.visible = false
 
@@ -177,7 +177,6 @@ func _on_skip_step_button_pressed() -> void:
 
 func _on_find_log_button_pressed() -> void:
 	log.clean_up()
-	log.reopen()
 	OS.shell_show_in_file_manager(ProjectSettings.globalize_path(Log.LOG_FILE_PATH))
 
 
