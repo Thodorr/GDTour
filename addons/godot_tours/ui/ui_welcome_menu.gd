@@ -90,8 +90,6 @@ func setup(translation_service: TranslationService, tour_list: GodotTourList) ->
 	# Scale with editor scale
 	if Engine.is_editor_hint() and owner != self:
 		control.theme = ThemeUtils.generate_scaled_theme(control.theme)
-		for node: Control in [label_title, button_start_learning]:
-			ThemeUtils.scale_font_size(node)
 		var editor_scale := EditorInterface.get_editor_scale()
 		panel_container.custom_minimum_size.x *= editor_scale
 		ThemeUtils.scale_margin_container_margins(margin_container)
