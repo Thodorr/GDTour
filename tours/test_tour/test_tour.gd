@@ -247,7 +247,7 @@ func _build() -> void:
 		await delay_process_frame(2)
 		assert(bubble.check_tasks(), "'bubble_add_task_press_button()' all tasks should be done")
 	)
-	auto_next()
+	# auto_next()
 	complete_step()
 
 	bubble_add_task_toggle_button(interface.context_switcher_2d_button)

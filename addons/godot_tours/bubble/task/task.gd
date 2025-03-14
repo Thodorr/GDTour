@@ -3,6 +3,8 @@ extends PanelContainer
 
 signal status_changed
 
+const ThemeUtils := preload("../../../gdquest_theme_utils/theme_utils.gd")
+
 enum Status { DONE, NOT_DONE, ERROR }
 
 const COLOR_BLUE := Color("4e719d")
@@ -75,6 +77,7 @@ func setup(
 		checkbox.add_theme_stylebox_override("panel", _panel_stylebox)
 
 	if Engine.is_editor_hint():
+		theme = ThemeUtils.generate_scaled_theme(theme)
 		checkbox.custom_minimum_size *= EditorInterface.get_editor_scale()
 
 
