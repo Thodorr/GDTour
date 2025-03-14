@@ -315,7 +315,7 @@ func highlight_tilemap_list_item(item_list: ItemList, item_index: int, play_flas
 
 	var dimmer := ensure_get_dimmer_for(interface.tilemap)
 	var rect_getter := func() -> Rect2:
-			var rect := item_list.get_item_rect(item_index)
-			rect.position += item_list.global_position
-			return rect
+		var rect := item_list.get_item_rect(item_index)
+		rect.position += item_list.global_position
+		return rect
 	add_highlight_to_control(interface.tilemap, rect_getter, play_flash)

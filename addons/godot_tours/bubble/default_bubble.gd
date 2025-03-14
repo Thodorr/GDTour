@@ -300,11 +300,13 @@ func set_background(texture: Texture2D) -> void:
 
 
 func check_tasks() -> bool:
-	var are_tasks_done := tasks_v_box_container.get_children().filter(func(task: Task) -> bool: return not task.is_queued_for_deletion()).all(func(task: Task) -> bool: return task.is_done())
+	var tasks := tasks_v_box_container.get_children().filter(func(task: Task) -> bool: return not task.is_queued_for_deletion())
+	var are_tasks_done := tasks.all(func(task: Task) -> bool: return task.is_done())
 	next_button.theme_type_variation = "GrayButton"
 	if are_tasks_done:
 		next_button.theme_type_variation = "NextButton"
-		avatar.do_wink()
+		if not tasks.is_empty():
+			avatar.do_wink()
 
 	if are_tasks_done:
 		_close_info()
