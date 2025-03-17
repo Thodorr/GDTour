@@ -136,6 +136,7 @@ func _ready() -> void:
 	)
 	button_close_yes.pressed.connect(close_requested.emit)
 	finish_button.pressed.connect(finish_requested.emit)
+	info_rich_text_label.finished.connect(_on_info_rich_text_label_finished)
 
 	for node in [header_rich_text_label, main_v_box_container, tasks_v_box_container, footer_rich_text_label, footer_spacer]:
 		node.visible = false
@@ -148,26 +149,32 @@ func _ready() -> void:
 func _on_next_button_pressed() -> void:
 	if next_button.theme_type_variation == "GrayButton":
 		Utils.update_locale(translation_service, {info_rich_text_label: {text = COMMIT_MESSAGE}})
-		info_rich_text_label.custom_minimum_size.y = 170.0 * editor_scale
 		buttons_panel_container.visible = false
 		bottom_h_box_container.visible = false
 
 		info_v_box_container.visible = true
 		commit_h_box_container.visible = true
 		logs_h_box_container.visible = false
+
+		if info_v_box_container.visible:
+			was_moved = false
+			move_and_anchor(interface.base_control, At.CENTER, margin, _get_offset_vector())
 	else:
 		next_button_pressed.emit()
 
 
 func _on_help_button_pressed() -> void:
 	Utils.update_locale(translation_service, {info_rich_text_label: {text = LOG_MESSAGE}})
-	info_rich_text_label.custom_minimum_size.y = interface.base_control.size.y - panel_container.size.y - 300.0 / editor_scale
 	buttons_panel_container.visible = false
 	bottom_h_box_container.visible = false
 
 	info_v_box_container.visible = true
 	commit_h_box_container.visible = false
 	logs_h_box_container.visible = true
+
+	if info_v_box_container.visible:
+		was_moved = false
+		move_and_anchor(interface.base_control, At.CENTER, margin, _get_offset_vector())
 
 
 func _on_skip_step_button_pressed() -> void:
@@ -180,10 +187,23 @@ func _on_find_log_button_pressed() -> void:
 	OS.shell_show_in_file_manager(ProjectSettings.globalize_path(Log.LOG_FILE_PATH))
 
 
+func _on_info_rich_text_label_finished() -> void:
+	const MARGIN := 300.0
+
+	await get_tree().process_frame
+	info_rich_text_label.custom_minimum_size.y = info_rich_text_label.get_content_height()
+	if info_rich_text_label.custom_minimum_size.y > interface.base_control.size.y - MARGIN:
+		info_rich_text_label.custom_minimum_size.y = interface.base_control.size.y - panel_container.size.y - MARGIN / editor_scale
+
+
 func _close_info() -> void:
 	buttons_panel_container.visible = true
 	bottom_h_box_container.visible = true
 	info_v_box_container.visible = false
+
+
+func _get_offset_vector() -> Vector2:
+	return (panel_container.global_position.x + (panel_container.size.x - interface.base_control.size.x) / 2.0) * Vector2.RIGHT
 
 
 func on_tour_step_changed(index: int) -> void:

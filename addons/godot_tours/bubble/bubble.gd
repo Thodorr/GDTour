@@ -23,6 +23,8 @@ const TaskPackedScene: PackedScene = preload("task/task.tscn")
 
 const TWEEN_DURATION := 0.25
 
+enum State { IDLE, DRAGGING }
+
 ## Location to place and anchor the bubble relative to a given Control node [b]inside its rectangle[/b]. Used in the
 ## function [method move_and_anchor] and by the [member at] variable.
 enum At {
@@ -50,6 +52,8 @@ const GROW_DIRECTIONS := {
 	At.CENTER_RIGHT: {h = Control.GROW_DIRECTION_BEGIN, v = Control.GROW_DIRECTION_BOTH},
 	At.CENTER: {h = Control.GROW_DIRECTION_BOTH, v = Control.GROW_DIRECTION_BOTH},
 }
+
+var _state: State = State.IDLE
 
 var is_debug := false
 
@@ -103,11 +107,6 @@ func _process(delta: float) -> void:
 	# RichTextLabel nodes added to the bubble can cause it to resize after 0, 1, or 2 frames. It's not reliable
 	# and depends on the computer. So, it's best to refresh every frame.
 	refresh()
-
-
-enum State { IDLE, DRAGGING }
-
-var _state: State = State.IDLE
 
 
 func _input(event: InputEvent) -> void:
