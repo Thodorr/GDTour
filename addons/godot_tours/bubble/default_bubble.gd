@@ -159,6 +159,7 @@ func _on_next_button_pressed() -> void:
 		if info_v_box_container.visible:
 			was_moved = false
 			move_and_anchor(interface.base_control, At.CENTER, margin, _get_offset_vector())
+			info_rich_text_label.finished.emit()
 	else:
 		next_button_pressed.emit()
 
@@ -175,6 +176,7 @@ func _on_help_button_pressed() -> void:
 	if info_v_box_container.visible:
 		was_moved = false
 		move_and_anchor(interface.base_control, At.CENTER, margin, _get_offset_vector())
+		info_rich_text_label.finished.emit()
 
 
 func _on_skip_step_button_pressed() -> void:
@@ -188,12 +190,13 @@ func _on_find_log_button_pressed() -> void:
 
 
 func _on_info_rich_text_label_finished() -> void:
-	const MARGIN := 300.0
+	while not info_rich_text_label.is_finished():
+		pass
 
-	await get_tree().process_frame
+	var margin := 0.0 if editor_scale < 1 else 300.0 / editor_scale
 	info_rich_text_label.custom_minimum_size.y = info_rich_text_label.get_content_height()
-	if info_rich_text_label.custom_minimum_size.y > interface.base_control.size.y - MARGIN:
-		info_rich_text_label.custom_minimum_size.y = interface.base_control.size.y - panel_container.size.y - MARGIN / editor_scale
+	if panel_container.size.y + info_rich_text_label.custom_minimum_size.y > interface.base_control.size.y - margin:
+		info_rich_text_label.custom_minimum_size.y = interface.base_control.size.y - panel_container.size.y - margin
 
 
 func _close_info() -> void:
