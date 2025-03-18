@@ -127,8 +127,10 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
-	context_set("2D")
+	context_set_asset_lib()
+	context_set_2d()
 	queue_command(func() -> void:
+		assert(interface.canvas_item_editor.is_visible_in_tree(), "'interface.canvas_item_editor' should be visible")
 		assert(
 			interface.context_switcher_2d_button.button_pressed == true,
 			"'interface.context_switcher_2d_button' should be pressed",
@@ -137,8 +139,9 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
-	context_set("3D")
+	context_set_3d()
 	queue_command(func() -> void:
+		assert(interface.spatial_editor.is_visible_in_tree(), "'interface.spatial_editor' should be visible")
 		assert(
 			interface.context_switcher_3d_button.button_pressed == true,
 			"'interface.context_switcher_3d_button' should be pressed",
@@ -147,8 +150,9 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
-	context_set("Script")
+	context_set_script()
 	queue_command(func() -> void:
+		assert(interface.script_editor.is_visible_in_tree(), "'interface.script_editor' should be visible")
 		assert(
 			interface.context_switcher_script_button.button_pressed == true,
 			"'interface.context_switcher_script_button' should be pressed"
@@ -157,8 +161,19 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
-	context_set("AssetLib")
+	context_set_game()
 	queue_command(func() -> void:
+		assert(
+			interface.context_switcher_game_button.button_pressed == true,
+			"'interface.context_switcher_game_button' should be pressed"
+		)
+	)
+	auto_next()
+	complete_step()
+
+	context_set_asset_lib()
+	queue_command(func() -> void:
+		assert(interface.asset_lib.is_visible_in_tree(), "'interface.asset_lib' should be visible")
 		assert(
 			interface.context_switcher_asset_lib_button.button_pressed == true,
 			"'interface.context_switcher_asset_lib_button' should be pressed",
@@ -239,13 +254,24 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
+	bubble_add_task_press_button(interface.run_bar_play_button)
+	queue_command(func() -> void:
+		EditorInterface.play_main_scene()
+		await delay_process_frame(2)
+		EditorInterface.stop_playing_scene()
+		await delay_process_frame(2)
+		assert(bubble.check_tasks(), "'bubble_add_task_press_button(interface.run_bar_play_button)' all tasks should be done")
+	)
+	auto_next()
+	complete_step()
+
 	bubble_add_task_press_button(interface.run_bar_play_current_button)
 	queue_command(func() -> void:
 		EditorInterface.play_current_scene()
 		await delay_process_frame(2)
 		EditorInterface.stop_playing_scene()
 		await delay_process_frame(2)
-		assert(bubble.check_tasks(), "'bubble_add_task_press_button()' all tasks should be done")
+		assert(bubble.check_tasks(), "'bubble_add_task_press_button(interface.run_bar_play_current_button)' all tasks should be done")
 	)
 	auto_next()
 	complete_step()
@@ -525,12 +551,22 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
+	bubble_set_title("Assert TileSet")
+	queue_command(func() -> void:
+		interface.bottom_button_tileset.toggled.emit(true)
+		await delay_process_frame(2)
+		assert(interface.tileset.is_visible_in_tree(), "'interface.tileset.is_visible_in_tree()' should be 'true'")
+	)
+	auto_next()
+	complete_step()
+
 	var item_index := 1
 	scene_select_nodes_by_path(["TestTour2D/TileMap"])
 	tabs_set_to_index(interface.tilemap_tabs, 0)
 	queue_command(func() -> void:
 		interface.bottom_button_tilemap.pressed.emit()
 		await delay_process_frame(10)
+		assert(interface.tilemap.is_visible_in_tree(), "'interface.tilemap.is_visible_in_tree()' should be 'true'")
 	)
 	highlight_tilemap_list_item(interface.tilemap_tiles, item_index)
 	queue_command(func() -> void:
@@ -567,5 +603,19 @@ func _build() -> void:
 	context_set_2d()
 	mouse_move_by_position(200 * Vector2.ONE, to)
 	mouse_bounce()
+	auto_next()
+	complete_step()
+
+	queue_command(func() -> void:
+		interface.bottom_button_output.toggled.emit(true)
+		assert(interface.logger.is_visible_in_tree(), "'interface.logger.is_visible_in_tree()' should be 'true'")
+	)
+	auto_next()
+	complete_step()
+
+	queue_command(func() -> void:
+		interface.bottom_button_debugger.toggled.emit(true)
+		assert(interface.debugger.is_visible_in_tree(), "'interface.debugger.is_visible_in_tree()' should be 'true'")
+	)
 	auto_next()
 	complete_step()

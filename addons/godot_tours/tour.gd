@@ -411,6 +411,10 @@ func context_set_script() -> void:
 	context_set("Script")
 
 
+func context_set_game() -> void:
+	context_set("Game")
+
+
 func context_set_asset_lib() -> void:
 	context_set("AssetLib")
 
