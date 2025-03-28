@@ -75,6 +75,7 @@ var spatial_editor_toolbar_selectable_button: Button = null
 var spatial_editor_toolbar_lock_button: Button = null
 var spatial_editor_toolbar_unlock_button: Button = null
 var spatial_editor_toolbar_group_button: Button = null
+var spatial_editor_toolbar_ruler_button: Button = null
 var spatial_editor_toolbar_ungroup_button: Button = null
 var spatial_editor_toolbar_local_button: Button = null
 var spatial_editor_toolbar_snap_button: Button = null
@@ -308,9 +309,9 @@ func _init() -> void:
 	spatial_editor_toolbar_unlock_button = spatial_editor_toolbar_buttons[6]
 	spatial_editor_toolbar_group_button = spatial_editor_toolbar_buttons[7]
 	spatial_editor_toolbar_ungroup_button = spatial_editor_toolbar_buttons[8]
-	spatial_editor_toolbar_local_button = spatial_editor_toolbar_buttons[9]
-	spatial_editor_toolbar_snap_button = spatial_editor_toolbar_buttons[10]
-	spatial_editor_toolbar_camera_button = spatial_editor_toolbar_buttons[11]
+	spatial_editor_toolbar_ruler_button = spatial_editor_toolbar_buttons[9]
+	spatial_editor_toolbar_local_button = spatial_editor_toolbar_buttons[10]
+	spatial_editor_toolbar_snap_button = spatial_editor_toolbar_buttons[11]
 	spatial_editor_toolbar_sun_button = spatial_editor_toolbar_buttons[12]
 	spatial_editor_toolbar_environment_button = spatial_editor_toolbar_buttons[13]
 	spatial_editor_toolbar_sun_environment_button = spatial_editor_toolbar_buttons[14]
@@ -447,6 +448,40 @@ func _init() -> void:
 	for window in windows:
 		window_toggle_tour_mode(window, true)
 
+	check_button_icons({
+		canvas_item_editor_toolbar_select_button: ["canvas_item_editor_toolbar_select_button", "ToolSelect"],
+		canvas_item_editor_toolbar_move_button: ["canvas_item_editor_toolbar_move_button", "ToolMove"],
+		canvas_item_editor_toolbar_rotate_button: ["canvas_item_editor_toolbar_rotate_button", "ToolRotate"],
+		canvas_item_editor_toolbar_scale_button: ["canvas_item_editor_toolbar_scale_button", "ToolScale"],
+		canvas_item_editor_toolbar_selectable_button: ["canvas_item_editor_toolbar_selectable_button", "ListSelect"],
+		canvas_item_editor_toolbar_pivot_button: ["canvas_item_editor_toolbar_pivot_button", "EditPivot"],
+		canvas_item_editor_toolbar_pan_button: ["canvas_item_editor_toolbar_pan_button", "ToolPan"],
+		canvas_item_editor_toolbar_ruler_button: ["canvas_item_editor_toolbar_ruler_button", "Ruler"],
+		canvas_item_editor_toolbar_smart_snap_button: ["canvas_item_editor_toolbar_smart_snap_button", "Snap"],
+		canvas_item_editor_toolbar_grid_button: ["canvas_item_editor_toolbar_grid_button", "SnapGrid"],
+		canvas_item_editor_toolbar_snap_options_button: ["canvas_item_editor_toolbar_snap_options_button", "GuiTabMenuHl"],
+		canvas_item_editor_toolbar_lock_button: ["canvas_item_editor_toolbar_lock_button", "Lock"],
+		canvas_item_editor_toolbar_unlock_button: ["canvas_item_editor_toolbar_unlock_button", "Unlock"],
+		canvas_item_editor_toolbar_group_button: ["canvas_item_editor_toolbar_group_button", "Group"],
+		canvas_item_editor_toolbar_ungroup_button: ["canvas_item_editor_toolbar_ungroup_button", "Ungroup"],
+		canvas_item_editor_toolbar_skeleton_options_button: ["canvas_item_editor_toolbar_skeleton_options_button", "Bone"],
+		spatial_editor_toolbar_select_button: ["spatial_editor_toolbar_select_button", "ToolSelect"],
+		spatial_editor_toolbar_move_button: ["spatial_editor_toolbar_move_button", "ToolMove"],
+		spatial_editor_toolbar_rotate_button: ["spatial_editor_toolbar_rotate_button", "ToolRotate"],
+		spatial_editor_toolbar_scale_button: ["spatial_editor_toolbar_scale_button", "ToolScale"],
+		spatial_editor_toolbar_selectable_button: ["spatial_editor_toolbar_selectable_button", "ListSelect"],
+		spatial_editor_toolbar_lock_button: ["spatial_editor_toolbar_lock_button", "Lock"],
+		spatial_editor_toolbar_unlock_button: ["spatial_editor_toolbar_unlock_button", "Unlock"],
+		spatial_editor_toolbar_group_button: ["spatial_editor_toolbar_group_button", "Group"],
+		spatial_editor_toolbar_ungroup_button: ["spatial_editor_toolbar_ungroup_button", "Ungroup"],
+		spatial_editor_toolbar_ruler_button: ["spatial_editor_toolbar_ruler_button", "Ruler"],
+		spatial_editor_toolbar_local_button: ["spatial_editor_toolbar_local_button", "Object"],
+		spatial_editor_toolbar_snap_button: ["spatial_editor_toolbar_snap_button", "Snap"],
+		spatial_editor_toolbar_sun_button: ["spatial_editor_toolbar_sun_button", "PreviewSun"],
+		spatial_editor_toolbar_environment_button: ["spatial_editor_toolbar_environment_button", "PreviewEnvironment"],
+		spatial_editor_toolbar_sun_environment_button: ["spatial_editor_toolbar_sun_environment_button", "GuiTabMenuHl"],
+	})
+
 
 func clean_up() -> void:
 	for window in windows:
@@ -487,3 +522,12 @@ func unfold_tree_item(item: TreeItem) -> void:
 
 func is_in_scripting_context() -> bool:
 	return script_editor_window_wrapper.visible
+
+
+func check_button_icons(buttons_info: Dictionary[Button, Array]) -> void:
+	var editor_theme := EditorInterface.get_editor_theme()
+	for button: Button in buttons_info:
+		var button_name: StringName = buttons_info[button][0]
+		var icon_name: StringName = buttons_info[button][1]
+		if button.icon != editor_theme.get_icon(icon_name, "EditorIcons"):
+			push_warning("Button `%s` should have `%s` icon, but doesn't!" % [button_name, icon_name])

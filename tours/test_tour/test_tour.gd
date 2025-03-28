@@ -29,6 +29,17 @@ func _build() -> void:
 	auto_next()
 	complete_step()
 
+	bubble_add_task_toggle_button(interface.canvas_item_editor_toolbar_smart_snap_button, true, gtr("Turn on grid snapping"))
+	highlight_controls([interface.canvas_item_editor_toolbar_smart_snap_button])
+	auto_next()
+	complete_step()
+
+	context_set_3d()
+	bubble_add_task_toggle_button(interface.spatial_editor_toolbar_snap_button, true, gtr("Turn on grid snapping"))
+	highlight_controls([interface.spatial_editor_toolbar_snap_button])
+	auto_next()
+	complete_step()
+
 	var file_path := "res://test_tour_2d.tscn"
 	scene_open(file_path)
 	queue_command(func() -> void:
@@ -49,7 +60,7 @@ func _build() -> void:
 	)
 	auto_next()
 	complete_step()
-
+	
 	scene_toggle_lock_nodes_by_path(["TestTour2D"])
 	queue_command(func() -> void:
 		var edited_scene_root := EditorInterface.get_edited_scene_root()
