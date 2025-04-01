@@ -449,6 +449,18 @@ func _init() -> void:
 		window_toggle_tour_mode(window, true)
 
 	check_button_icons({
+		context_switcher_2d_button: ["context_switcher_2d_button", "2D"],
+		context_switcher_3d_button: ["context_switcher_3d_button", "3D"],
+		context_switcher_script_button: ["context_switcher_script_button", "Script"],
+		context_switcher_game_button: ["context_switcher_game_button", "Game"],
+		context_switcher_asset_lib_button: ["context_switcher_asset_lib_button", "AssetLib"],
+		run_bar_play_button: ["run_bar_play_button", "MainPlay"],
+		run_bar_pause_button: ["run_bar_pause_button", "Pause"],
+		run_bar_stop_button: ["run_bar_stop_button", "Stop"],
+		run_bar_play_current_button: ["run_bar_play_current_button", "PlayScene"],
+		run_bar_play_custom_button: ["run_bar_play_custom_button", "PlayCustom"],
+		run_bar_movie_mode_button: ["run_bar_movie_mode_button", "MainMovieWrite"],
+		distraction_free_button: ["distraction_free_button", "DistractionFree"],
 		canvas_item_editor_toolbar_select_button: ["canvas_item_editor_toolbar_select_button", "ToolSelect"],
 		canvas_item_editor_toolbar_move_button: ["canvas_item_editor_toolbar_move_button", "ToolMove"],
 		canvas_item_editor_toolbar_rotate_button: ["canvas_item_editor_toolbar_rotate_button", "ToolRotate"],
@@ -465,6 +477,8 @@ func _init() -> void:
 		canvas_item_editor_toolbar_group_button: ["canvas_item_editor_toolbar_group_button", "Group"],
 		canvas_item_editor_toolbar_ungroup_button: ["canvas_item_editor_toolbar_ungroup_button", "Ungroup"],
 		canvas_item_editor_toolbar_skeleton_options_button: ["canvas_item_editor_toolbar_skeleton_options_button", "Bone"],
+		canvas_item_editor_zoom_button_lower: ["canvas_item_editor_zoom_button_lower", "ZoomLess"],
+		canvas_item_editor_zoom_button_increase: ["canvas_item_editor_zoom_button_increase", "ZoomMore"],
 		spatial_editor_toolbar_select_button: ["spatial_editor_toolbar_select_button", "ToolSelect"],
 		spatial_editor_toolbar_move_button: ["spatial_editor_toolbar_move_button", "ToolMove"],
 		spatial_editor_toolbar_rotate_button: ["spatial_editor_toolbar_rotate_button", "ToolRotate"],
@@ -480,6 +494,10 @@ func _init() -> void:
 		spatial_editor_toolbar_sun_button: ["spatial_editor_toolbar_sun_button", "PreviewSun"],
 		spatial_editor_toolbar_environment_button: ["spatial_editor_toolbar_environment_button", "PreviewEnvironment"],
 		spatial_editor_toolbar_sun_environment_button: ["spatial_editor_toolbar_sun_environment_button", "GuiTabMenuHl"],
+		scene_dock_button_add: ["scene_dock_button_add", "Add"],
+		node_dock_signals_button: ["node_dock_signals_button", "Signals"],
+		node_dock_groups_button: ["node_dock_groups_button", "Groups"],
+		tilemap_terrains_tool_draw: ["tilemap_terrains_tool_draw", "Edit"],
 	})
 
 
@@ -529,5 +547,8 @@ func check_button_icons(buttons_info: Dictionary[Button, Array]) -> void:
 	for button: Button in buttons_info:
 		var button_name: StringName = buttons_info[button][0]
 		var icon_name: StringName = buttons_info[button][1]
-		if button.icon != editor_theme.get_icon(icon_name, "EditorIcons"):
+		var editor_has_icon := editor_theme.has_icon(icon_name, "EditorIcons")
+		if editor_has_icon and button.icon != editor_theme.get_icon(icon_name, "EditorIcons"):
 			push_warning("Button `%s` should have `%s` icon, but doesn't!" % [button_name, icon_name])
+		elif not editor_has_icon:
+			push_warning("Icon `%s` doesn't exist in the `EditorIcons` theme type! Check for typos." % icon_name)
