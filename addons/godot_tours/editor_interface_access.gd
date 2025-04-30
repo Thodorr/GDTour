@@ -158,36 +158,36 @@ var spriteframes: HSplitContainer = null
 var spriteframes_animation: VBoxContainer = null
 var spriteframes_animation_toolbar: HBoxContainer = null
 var spriteframes_animation_toolbar_controls: Array[Control] = []
-var spriteframes_animation_toolbar_add_animation: Button = null
-var spriteframes_animation_toolbar_duplicate_animation: Button = null
-var spriteframes_animation_toolbar_delete_animation: Button = null
-var spriteframes_animation_toolbar_autoplay_on_load: Button = null
-var spriteframes_animation_toolbar_animation_looping: Button = null
-var spriteframes_animation_toolbar_animation_speed: SpinBox = null
+var spriteframes_animation_toolbar_add_animation_button: Button = null
+var spriteframes_animation_toolbar_duplicate_animation_button: Button = null
+var spriteframes_animation_toolbar_delete_animation_button: Button = null
+var spriteframes_animation_toolbar_autoplay_button: Button = null
+var spriteframes_animation_toolbar_looping_button: Button = null
+var spriteframes_animation_toolbar_speed: SpinBox = null
 var spriteframes_animation_filter: LineEdit = null
 var spriteframes_animations: Tree= null
 var spriteframes_frames: VBoxContainer = null
 var spriteframes_frames_toolbar: HFlowContainer = null
 var spriteframes_frames_toolbar_controls: Array[Control] = []
 var spriteframes_frames_list: ItemList = null
-var spriteframes_frames_toolbar_play_back: Button = null
-var spriteframes_frames_toolbar_play_back_from_end: Button = null
-var spriteframes_frames_toolbar_stop: Button = null
-var spriteframes_frames_toolbar_play_from_start: Button = null
-var spriteframes_frames_toolbar_play: Button = null
-var spriteframes_frames_toolbar_add_from_file: Button = null
-var spriteframes_frames_toolbar_add_from_sheet: Button = null
-var spriteframes_frames_toolbar_copy: Button = null
-var spriteframes_frames_toolbar_paste: Button = null
-var spriteframes_frames_toolbar_insert_before: Button = null
-var spriteframes_frames_toolbar_insert_after: Button = null
-var spriteframes_frames_toolbar_move_left: Button = null
-var spriteframes_frames_toolbar_move_right: Button = null
-var spriteframes_frames_toolbar_delete: Button = null
+var spriteframes_frames_toolbar_play_back_button: Button = null
+var spriteframes_frames_toolbar_play_back_from_end_button: Button = null
+var spriteframes_frames_toolbar_stop_button: Button = null
+var spriteframes_frames_toolbar_play_from_start_button: Button = null
+var spriteframes_frames_toolbar_play_button: Button = null
+var spriteframes_frames_toolbar_add_from_file_button: Button = null
+var spriteframes_frames_toolbar_add_from_sheet_button: Button = null
+var spriteframes_frames_toolbar_copy_button: Button = null
+var spriteframes_frames_toolbar_paste_button: Button = null
+var spriteframes_frames_toolbar_insert_before_button: Button = null
+var spriteframes_frames_toolbar_insert_after_button: Button = null
+var spriteframes_frames_toolbar_move_left_button: Button = null
+var spriteframes_frames_toolbar_move_right_button: Button = null
+var spriteframes_frames_toolbar_delete_button: Button = null
 var spriteframes_frames_toolbar_frame_duration: SpinBox = null
-var spriteframes_frames_toolbar_zoom_out: Button = null
-var spriteframes_frames_toolbar_zoom_reset: Button = null
-var spriteframes_frames_toolbar_zoom_in: Button = null
+var spriteframes_frames_toolbar_zoom_out_button: Button = null
+var spriteframes_frames_toolbar_zoom_reset_button: Button = null
+var spriteframes_frames_toolbar_zoom_in_button: Button = null
 
 var tilemap: Control = null
 var tilemap_tabs: TabBar = null
@@ -195,6 +195,7 @@ var tilemap_tiles_panel: VBoxContainer = null
 var tilemap_tiles: ItemList = null
 var tilemap_tiles_atlas_view: Control = null
 var tilemap_tiles_toolbar: HBoxContainer = null
+var tilemap_tiles_toolbar_buttons: Array[Control] = []
 var tilemap_patterns_panel: VBoxContainer = null
 var tilemap_terrains_panel: VBoxContainer = null
 ## The tree on the left to select terrains in the TileMap -> Terrains tab.
@@ -220,22 +221,22 @@ var animation_player: VBoxContainer = null
 var shader: MarginContainer = null
 
 var bottom_buttons_container: HBoxContainer = null
-var bottom_button_output: Button = null
-var bottom_button_debugger: Button = null
-var bottom_button_search_results: Button = null
-var bottom_button_audio: Button = null
-var bottom_button_animation: Button = null
-var bottom_button_animation_tree: Button = null
-var bottom_button_resource_preloader: Button = null
-var bottom_button_shader_editor: Button = null
-var bottom_button_shader_file: Button = null
-var bottom_button_sprite_frames: Button = null
-var bottom_button_theme: Button = null
-var bottom_button_polygon: Button = null
-var bottom_button_tileset: Button = null
-var bottom_button_tilemap: Button = null
-var bottom_button_replication: Button = null
-var bottom_button_gridmap: Button = null
+var bottom_output_button: Button = null
+var bottom_debugger_button: Button = null
+var bottom_search_results_button: Button = null
+var bottom_audio_button: Button = null
+var bottom_animation_button: Button = null
+var bottom_animation_tree_button: Button = null
+var bottom_resource_preloader_button: Button = null
+var bottom_shader_editor_button: Button = null
+var bottom_shader_file_button: Button = null
+var bottom_sprite_frames_button: Button = null
+var bottom_theme_button: Button = null
+var bottom_polygon_button: Button = null
+var bottom_tileset_button: Button = null
+var bottom_tilemap_button: Button = null
+var bottom_replication_button: Button = null
+var bottom_gridmap_button: Button = null
 var bottom_buttons: Array[Button] = []
 
 var scene_import_settings_window: ConfirmationDialog = null
@@ -446,22 +447,22 @@ func _init() -> void:
 	bottom_buttons_container = Utils.find_child_by_type(Utils.find_child_by_type(editor_toaster.get_parent(), "ScrollContainer", false), "HBoxContainer", false)
 
 	bottom_buttons.assign(bottom_buttons_container.get_children())
-	bottom_button_output = bottom_buttons[0]
-	bottom_button_debugger = bottom_buttons[1]
-	bottom_button_search_results = bottom_buttons[2]
-	bottom_button_audio = bottom_buttons[3]
-	bottom_button_animation = bottom_buttons[4]
-	bottom_button_animation_tree = bottom_buttons[5]
-	bottom_button_resource_preloader = bottom_buttons[6]
-	bottom_button_shader_editor = bottom_buttons[7]
-	bottom_button_shader_file = bottom_buttons[8]
-	bottom_button_sprite_frames = bottom_buttons[9]
-	bottom_button_theme = bottom_buttons[10]
-	bottom_button_polygon = bottom_buttons[11]
-	bottom_button_tileset = bottom_buttons[12]
-	bottom_button_tilemap = bottom_buttons[13]
-	bottom_button_replication = bottom_buttons[14]
-	bottom_button_gridmap = bottom_buttons[-1]
+	bottom_output_button = bottom_buttons[0]
+	bottom_debugger_button = bottom_buttons[1]
+	bottom_search_results_button = bottom_buttons[2]
+	bottom_audio_button = bottom_buttons[3]
+	bottom_animation_button = bottom_buttons[4]
+	bottom_animation_tree_button = bottom_buttons[5]
+	bottom_resource_preloader_button = bottom_buttons[6]
+	bottom_shader_editor_button = bottom_buttons[7]
+	bottom_shader_file_button = bottom_buttons[8]
+	bottom_sprite_frames_button = bottom_buttons[9]
+	bottom_theme_button = bottom_buttons[10]
+	bottom_polygon_button = bottom_buttons[11]
+	bottom_tileset_button = bottom_buttons[12]
+	bottom_tilemap_button = bottom_buttons[13]
+	bottom_replication_button = bottom_buttons[14]
+	bottom_gridmap_button = bottom_buttons[-1]
 
 	spriteframes = Utils.find_child_by_type(bottom_panels_vboxcontainer, "SpriteFramesEditor", false)
 	var spriteframes_containers := spriteframes.find_children("", "VBoxContainer", false, false)
@@ -470,12 +471,12 @@ func _init() -> void:
 	spriteframes_animation = spriteframes_containers[0].get_child(1).get_child(0)
 	spriteframes_animation_toolbar = spriteframes_animation.get_child(0)
 	spriteframes_animation_toolbar_controls.assign(spriteframes_animation_toolbar.find_children("", "Button", true, false) + spriteframes_animation_toolbar.find_children("", "SpinBox", true, false))
-	spriteframes_animation_toolbar_add_animation = spriteframes_animation_toolbar_controls[0]
-	spriteframes_animation_toolbar_duplicate_animation = spriteframes_animation_toolbar_controls[1]
-	spriteframes_animation_toolbar_delete_animation = spriteframes_animation_toolbar_controls[2]
-	spriteframes_animation_toolbar_autoplay_on_load = spriteframes_animation_toolbar_controls[3]
-	spriteframes_animation_toolbar_animation_looping = spriteframes_animation_toolbar_controls[4]
-	spriteframes_animation_toolbar_animation_speed = spriteframes_animation_toolbar_controls[5]
+	spriteframes_animation_toolbar_add_animation_button = spriteframes_animation_toolbar_controls[0]
+	spriteframes_animation_toolbar_duplicate_animation_button = spriteframes_animation_toolbar_controls[1]
+	spriteframes_animation_toolbar_delete_animation_button = spriteframes_animation_toolbar_controls[2]
+	spriteframes_animation_toolbar_autoplay_button = spriteframes_animation_toolbar_controls[3]
+	spriteframes_animation_toolbar_looping_button = spriteframes_animation_toolbar_controls[4]
+	spriteframes_animation_toolbar_speed = spriteframes_animation_toolbar_controls[5]
 	spriteframes_animation_filter = Utils.find_child_by_type(spriteframes_animation, "LineEdit", true)
 	spriteframes_animations = Utils.find_child_by_type(spriteframes_animation, "Tree", false)
 
@@ -490,24 +491,24 @@ func _init() -> void:
 	)
 	spriteframes_frames_toolbar_controls.append_array(spriteframes_frames_toolbar.find_children("", "SpinBox", true, false))
 	spriteframes_frames_toolbar_controls.append_array(spriteframes_frames_toolbar_hboxes[-1].find_children("", "Button", true, false))
-	spriteframes_frames_toolbar_play_back = spriteframes_frames_toolbar_controls[0]
-	spriteframes_frames_toolbar_play_back_from_end = spriteframes_frames_toolbar_controls[1]
-	spriteframes_frames_toolbar_stop = spriteframes_frames_toolbar_controls[2]
-	spriteframes_frames_toolbar_play_from_start = spriteframes_frames_toolbar_controls[3]
-	spriteframes_frames_toolbar_play = spriteframes_frames_toolbar_controls[4]
-	spriteframes_frames_toolbar_add_from_file = spriteframes_frames_toolbar_controls[5]
-	spriteframes_frames_toolbar_add_from_sheet = spriteframes_frames_toolbar_controls[6]
-	spriteframes_frames_toolbar_copy = spriteframes_frames_toolbar_controls[7]
-	spriteframes_frames_toolbar_paste = spriteframes_frames_toolbar_controls[8]
-	spriteframes_frames_toolbar_insert_before = spriteframes_frames_toolbar_controls[9]
-	spriteframes_frames_toolbar_insert_after = spriteframes_frames_toolbar_controls[10]
-	spriteframes_frames_toolbar_move_left = spriteframes_frames_toolbar_controls[11]
-	spriteframes_frames_toolbar_move_right = spriteframes_frames_toolbar_controls[12]
-	spriteframes_frames_toolbar_delete = spriteframes_frames_toolbar_controls[13]
+	spriteframes_frames_toolbar_play_back_button = spriteframes_frames_toolbar_controls[0]
+	spriteframes_frames_toolbar_play_back_from_end_button = spriteframes_frames_toolbar_controls[1]
+	spriteframes_frames_toolbar_stop_button = spriteframes_frames_toolbar_controls[2]
+	spriteframes_frames_toolbar_play_from_start_button = spriteframes_frames_toolbar_controls[3]
+	spriteframes_frames_toolbar_play_button = spriteframes_frames_toolbar_controls[4]
+	spriteframes_frames_toolbar_add_from_file_button = spriteframes_frames_toolbar_controls[5]
+	spriteframes_frames_toolbar_add_from_sheet_button = spriteframes_frames_toolbar_controls[6]
+	spriteframes_frames_toolbar_copy_button = spriteframes_frames_toolbar_controls[7]
+	spriteframes_frames_toolbar_paste_button = spriteframes_frames_toolbar_controls[8]
+	spriteframes_frames_toolbar_insert_before_button = spriteframes_frames_toolbar_controls[9]
+	spriteframes_frames_toolbar_insert_after_button = spriteframes_frames_toolbar_controls[10]
+	spriteframes_frames_toolbar_move_left_button = spriteframes_frames_toolbar_controls[11]
+	spriteframes_frames_toolbar_move_right_button = spriteframes_frames_toolbar_controls[12]
+	spriteframes_frames_toolbar_delete_button = spriteframes_frames_toolbar_controls[13]
 	spriteframes_frames_toolbar_frame_duration = spriteframes_frames_toolbar_controls[14]
-	spriteframes_frames_toolbar_zoom_out = spriteframes_frames_toolbar_controls[15]
-	spriteframes_frames_toolbar_zoom_reset = spriteframes_frames_toolbar_controls[16]
-	spriteframes_frames_toolbar_zoom_in = spriteframes_frames_toolbar_controls[17]
+	spriteframes_frames_toolbar_zoom_out_button = spriteframes_frames_toolbar_controls[15]
+	spriteframes_frames_toolbar_zoom_reset_button = spriteframes_frames_toolbar_controls[16]
+	spriteframes_frames_toolbar_zoom_in_button = spriteframes_frames_toolbar_controls[17]
 
 	tilemap = Utils.find_child_by_type(bottom_panels_vboxcontainer, "TileMapLayerEditor", false)
 	var tilemap_flow_container: HFlowContainer = Utils.find_child_by_type(
@@ -600,28 +601,28 @@ func _init() -> void:
 		node_dock_signals_button: ["node_dock_signals_button", "Signals"],
 		node_dock_groups_button: ["node_dock_groups_button", "Groups"],
 		tilemap_terrains_tool_draw: ["tilemap_terrains_tool_draw", "Edit"],
-		spriteframes_animation_toolbar_add_animation: ["spriteframes_animation_toolbar_controls", "New"],
-		spriteframes_animation_toolbar_duplicate_animation: ["spriteframes_animation_toolbar_controls", "Duplicate"],
-		spriteframes_animation_toolbar_delete_animation: ["spriteframes_animation_toolbar_controls", "Remove"],
-		spriteframes_animation_toolbar_autoplay_on_load: ["spriteframes_animation_toolbar_controls", "AutoPlay"],
-		spriteframes_animation_toolbar_animation_looping: ["spriteframes_animation_toolbar_controls", "Loop"],
-		spriteframes_frames_toolbar_play_back: ["spriteframes_frames_toolbar_play_back", "PlayBackwards"],
-		spriteframes_frames_toolbar_play_back_from_end: ["spriteframes_frames_toolbar_play_back_from_end", "PlayStartBackwards"],
-		spriteframes_frames_toolbar_stop: ["spriteframes_frames_toolbar_stop", "Stop"],
-		spriteframes_frames_toolbar_play_from_start: ["spriteframes_frames_toolbar_play_from_start", "PlayStart"],
-		spriteframes_frames_toolbar_play: ["spriteframes_frames_toolbar_play", "Play"],
-		spriteframes_frames_toolbar_add_from_file: ["spriteframes_frames_toolbar_add_from_file", "Load"],
-		spriteframes_frames_toolbar_add_from_sheet: ["spriteframes_frames_toolbar_add_from_sheet", "SpriteSheet"],
-		spriteframes_frames_toolbar_copy: ["spriteframes_frames_toolbar_copy", "ActionCopy"],
-		spriteframes_frames_toolbar_paste: ["spriteframes_frames_toolbar_paste", "ActionPaste"],
-		spriteframes_frames_toolbar_insert_before: ["spriteframes_frames_toolbar_insert_before", "InsertBefore"],
-		spriteframes_frames_toolbar_insert_after: ["spriteframes_frames_toolbar_insert_after", "InsertAfter"],
-		spriteframes_frames_toolbar_move_left: ["spriteframes_frames_toolbar_move_left", "MoveLeft"],
-		spriteframes_frames_toolbar_move_right: ["spriteframes_frames_toolbar_move_right", "MoveRight"],
-		spriteframes_frames_toolbar_delete: ["spriteframes_frames_toolbar_delete", "Remove"],
-		spriteframes_frames_toolbar_zoom_out: ["spriteframes_frames_toolbar_zoom_out", "ZoomLess"],
-		spriteframes_frames_toolbar_zoom_reset: ["spriteframes_frames_toolbar_zoom_reset", "ZoomReset"],
-		spriteframes_frames_toolbar_zoom_in: ["spriteframes_frames_toolbar_zoom_in", "ZoomMore"],
+		spriteframes_animation_toolbar_add_animation_button: ["spriteframes_animation_toolbar_add_animation_button", "New"],
+		spriteframes_animation_toolbar_duplicate_animation_button: ["spriteframes_animation_toolbar_duplicate_animation_button", "Duplicate"],
+		spriteframes_animation_toolbar_delete_animation_button: ["spriteframes_animation_toolbar_delete_animation_button", "Remove"],
+		spriteframes_animation_toolbar_autoplay_button: ["spriteframes_animation_toolbar_autoplay_button", "AutoPlay"],
+		spriteframes_animation_toolbar_looping_button: ["spriteframes_animation_toolbar_looping_button", "Loop"],
+		spriteframes_frames_toolbar_play_back_button: ["spriteframes_frames_toolbar_play_back_button", "PlayBackwards"],
+		spriteframes_frames_toolbar_play_back_from_end_button: ["spriteframes_frames_toolbar_play_back_from_end_button", "PlayStartBackwards"],
+		spriteframes_frames_toolbar_stop_button: ["spriteframes_frames_toolbar_stop_button", "Stop"],
+		spriteframes_frames_toolbar_play_from_start_button: ["spriteframes_frames_toolbar_play_from_start_button", "PlayStart"],
+		spriteframes_frames_toolbar_play_button: ["spriteframes_frames_toolbar_play_button", "Play"],
+		spriteframes_frames_toolbar_add_from_file_button: ["spriteframes_frames_toolbar_add_from_file_button", "Load"],
+		spriteframes_frames_toolbar_add_from_sheet_button: ["spriteframes_frames_toolbar_add_from_sheet_button", "SpriteSheet"],
+		spriteframes_frames_toolbar_copy_button: ["spriteframes_frames_toolbar_copy_button", "ActionCopy"],
+		spriteframes_frames_toolbar_paste_button: ["spriteframes_frames_toolbar_paste_button", "ActionPaste"],
+		spriteframes_frames_toolbar_insert_before_button: ["spriteframes_frames_toolbar_insert_before_button", "InsertBefore"],
+		spriteframes_frames_toolbar_insert_after_button: ["spriteframes_frames_toolbar_insert_after_button", "InsertAfter"],
+		spriteframes_frames_toolbar_move_left_button: ["spriteframes_frames_toolbar_move_left_button", "MoveLeft"],
+		spriteframes_frames_toolbar_move_right_button: ["spriteframes_frames_toolbar_move_right_button", "MoveRight"],
+		spriteframes_frames_toolbar_delete_button: ["spriteframes_frames_toolbar_delete_button", "Remove"],
+		spriteframes_frames_toolbar_zoom_out_button: ["spriteframes_frames_toolbar_zoom_out_button", "ZoomLess"],
+		spriteframes_frames_toolbar_zoom_reset_button: ["spriteframes_frames_toolbar_zoom_reset_button", "ZoomReset"],
+		spriteframes_frames_toolbar_zoom_in_button: ["spriteframes_frames_toolbar_zoom_in_button", "ZoomMore"],
 	})
 
 
