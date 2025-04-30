@@ -1627,4 +1627,4 @@ func sort_ascending_by_path(a: Node, b: Node) -> bool: return str(a.get_path()) 
 
 ## Closes the bottom panel in the editor by setting the output button to unpressed.
 func _close_bottom_panel() -> void:
-	interface.bottom_button_output.button_pressed = false
+	interface.bottom_output_button.button_pressed = false

@@ -564,7 +564,7 @@ func _build() -> void:
 
 	bubble_set_title("Assert TileSet")
 	queue_command(func() -> void:
-		interface.bottom_button_tileset.toggled.emit(true)
+		interface.bottom_tileset_button.toggled.emit(true)
 		await delay_process_frame(2)
 		assert(interface.tileset.is_visible_in_tree(), "'interface.tileset.is_visible_in_tree()' should be 'true'")
 	)
@@ -575,7 +575,7 @@ func _build() -> void:
 	scene_select_nodes_by_path(["TestTour2D/TileMap"])
 	tabs_set_to_index(interface.tilemap_tabs, 0)
 	queue_command(func() -> void:
-		interface.bottom_button_tilemap.pressed.emit()
+		interface.bottom_tilemap_button.pressed.emit()
 		await delay_process_frame(10)
 		assert(interface.tilemap.is_visible_in_tree(), "'interface.tilemap.is_visible_in_tree()' should be 'true'")
 	)
@@ -594,7 +594,7 @@ func _build() -> void:
 
 	context_set_3d()
 	queue_command(func() -> void:
-		interface.bottom_button_tilemap.toggled.emit(false)
+		interface.bottom_tilemap_button.toggled.emit(false)
 		await delay_process_frame(2)
 	)
 	highlight_spatial_editor_camera_region(Vector3.ZERO, Vector3(2, 0, 3))
@@ -618,14 +618,14 @@ func _build() -> void:
 	complete_step()
 
 	queue_command(func() -> void:
-		interface.bottom_button_output.toggled.emit(true)
+		interface.bottom_output_button.toggled.emit(true)
 		assert(interface.logger.is_visible_in_tree(), "'interface.logger.is_visible_in_tree()' should be 'true'")
 	)
 	auto_next()
 	complete_step()
 
 	queue_command(func() -> void:
-		interface.bottom_button_debugger.toggled.emit(true)
+		interface.bottom_debugger_button.toggled.emit(true)
 		assert(interface.debugger.is_visible_in_tree(), "'interface.debugger.is_visible_in_tree()' should be 'true'")
 	)
 	auto_next()

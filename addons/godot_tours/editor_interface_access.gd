@@ -53,12 +53,12 @@ var canvas_item_editor_toolbar_skeleton_options_button: Button = null
 ## Parent container of the zoom buttons in the top-left of the 2D editor.
 var canvas_item_editor_zoom_widget: Control = null
 ## Lower zoom button in the top-left of the 2D viewport.
-var canvas_item_editor_zoom_button_lower: Button = null
+var canvas_item_editor_zoom_out_button: Button = null
 ## Button showing the current zoom percentage in the top-left of the 2D viewport. Pressing it resets
 ## the zoom to 100%.
-var canvas_item_editor_zoom_button_reset: Button = null
+var canvas_item_editor_zoom_reset_button: Button = null
 ## Increase zoom button in the top-left of the 2D viewport.
-var canvas_item_editor_zoom_button_increase: Button = null
+var canvas_item_editor_zoom_in_button: Button = null
 
 var spatial_editor: Control = null
 var spatial_editor_surfaces: Array[Control] = []
@@ -112,7 +112,7 @@ var snap_options_scale_step_controls: Array[Control] = []
 # Left Upper
 var scene_tabs: TabBar = null
 var scene_dock: VBoxContainer = null
-var scene_dock_button_add: Button = null
+var scene_dock_add_button: Button = null
 var scene_tree: Tree = null
 var import_dock: VBoxContainer = null
 var select_node_window: ConfirmationDialog = null
@@ -191,20 +191,54 @@ var spriteframes_frames_toolbar_zoom_in_button: Button = null
 
 var tilemap: Control = null
 var tilemap_tabs: TabBar = null
+var tilemap_layers_button: OptionButton = null
+var tilemap_previous_button: Button = null
+var tilemap_next_button: Button = null
+var tilemap_highlight_button: Button = null
+var tilemap_grid_button: Button = null
+var tilemap_menu_button: MenuButton = null
+
+var tilemap_panels: Array[Control] = []
 var tilemap_tiles_panel: VBoxContainer = null
 var tilemap_tiles: ItemList = null
-var tilemap_tiles_atlas_view: Control = null
 var tilemap_tiles_toolbar: HBoxContainer = null
 var tilemap_tiles_toolbar_buttons: Array[Control] = []
+var tilemap_tiles_toolbar_select_button: Button = null
+var tilemap_tiles_toolbar_paint_button: Button = null
+var tilemap_tiles_toolbar_line_button: Button = null
+var tilemap_tiles_toolbar_rect_button: Button = null
+var tilemap_tiles_toolbar_bucket_button: Button = null
+var tilemap_tiles_toolbar_picker_button: Button = null
+var tilemap_tiles_toolbar_eraser_button: Button = null
+var tilemap_tiles_toolbar_rotate_left_button: Button = null
+var tilemap_tiles_toolbar_rotate_right_button: Button = null
+var tilemap_tiles_toolbar_flip_h_button: Button = null
+var tilemap_tiles_toolbar_flip_v_button: Button = null
+var tilemap_tiles_toolbar_contiguous_button: CheckBox = null
+var tilemap_tiles_toolbar_random_button: Button = null
+var tilemap_tiles_atlas_view: Control = null
+var tilemap_tiles_atlas_view_zoom_widget: HBoxContainer = null
+var tilemap_tiles_atlas_view_zoom_out_button: Button = null
+var tilemap_tiles_atlas_view_zoom_reset_button: Button = null
+var tilemap_tiles_atlas_view_zoom_in_button: Button = null
+var tilemap_tiles_atlas_view_center_button: Button = null
+
 var tilemap_patterns_panel: VBoxContainer = null
+
 var tilemap_terrains_panel: VBoxContainer = null
 ## The tree on the left to select terrains in the TileMap -> Terrains tab.
 var tilemap_terrains_tree: Tree = null
 ## The list of terrain drawing mode and individual tiles on the right in the TileMap -> Terrains tab.
 var tilemap_terrains_tiles: ItemList = null
 var tilemap_terrains_toolbar: HBoxContainer = null
-var tilemap_terrains_tool_draw: Button = null
-var tilemap_panels: Array[Control] = []
+var tilemap_terrains_toolbar_buttons: Array[Button] = []
+var tilemap_terrains_toolbar_paint_button: Button = null
+var tilemap_terrains_toolbar_line_button: Button = null
+var tilemap_terrains_toolbar_rect_button: Button = null
+var tilemap_terrains_toolbar_bucket_button: Button = null
+var tilemap_terrains_toolbar_picker_button: Button = null
+var tilemap_terrains_toolbar_eraser_button: Button = null
+var tilemap_terrains_toolbar_contiguous_button: CheckBox = null
 
 var tileset: Control = null
 var tileset_tabs: TabBar = null
@@ -309,9 +343,9 @@ func _init() -> void:
 	canvas_item_editor_zoom_widget = Utils.find_child_by_type(
 		canvas_item_editor_viewport, "EditorZoomWidget"
 	)
-	canvas_item_editor_zoom_button_lower = canvas_item_editor_zoom_widget.get_child(0)
-	canvas_item_editor_zoom_button_reset = canvas_item_editor_zoom_widget.get_child(1)
-	canvas_item_editor_zoom_button_increase = canvas_item_editor_zoom_widget.get_child(2)
+	canvas_item_editor_zoom_out_button = canvas_item_editor_zoom_widget.get_child(0)
+	canvas_item_editor_zoom_reset_button = canvas_item_editor_zoom_widget.get_child(1)
+	canvas_item_editor_zoom_in_button = canvas_item_editor_zoom_widget.get_child(2)
 
 	snap_options_window = Utils.find_child_by_type(base_control, "SnapDialog")
 	snap_options = snap_options_window.get_child(0)
@@ -377,7 +411,7 @@ func _init() -> void:
 
 	# Left Upper
 	scene_dock = Utils.find_child_by_type(base_control, "SceneTreeDock")
-	scene_dock_button_add = scene_dock.get_child(0).get_child(0)
+	scene_dock_add_button = scene_dock.get_child(0).get_child(0)
 	node_create_window = Utils.find_child_by_type(scene_dock, "CreateDialog")
 	node_create_panel = Utils.find_child_by_type(node_create_window, "HSplitContainer")
 	var node_create_dialog_vboxcontainer: VBoxContainer = Utils.find_child_by_type(
@@ -515,16 +549,38 @@ func _init() -> void:
 		tilemap, "HFlowContainer", false
 	)
 	tilemap_tabs = tilemap_flow_container.get_child(0)
+	var tilemap_flow_layers_hbox := tilemap_flow_container.get_child(4)
+	tilemap_layers_button = tilemap_flow_layers_hbox.get_child(0)
+	tilemap_previous_button = tilemap_flow_layers_hbox.get_child(1)
+	tilemap_next_button = tilemap_flow_layers_hbox.get_child(2)
+	tilemap_highlight_button = tilemap_flow_container.get_child(5)
+	tilemap_grid_button = tilemap_flow_container.get_child(7)
+	tilemap_menu_button = tilemap_flow_container.get_child(8)
 
 	tilemap_tiles_panel = tilemap.get_child(2)
-	var tilemap_tiles_hsplitcontainer: HSplitContainer = Utils.find_child_by_type(
-		tilemap_tiles_panel, "HSplitContainer", false
-	)
+	var tilemap_tiles_hsplitcontainer: HSplitContainer = Utils.find_child_by_type(tilemap_tiles_panel, "HSplitContainer", false)
 	tilemap_tiles = Utils.find_child_by_type(tilemap_tiles_hsplitcontainer, "ItemList")
-	tilemap_tiles_atlas_view = Utils.find_child_by_type(
-		tilemap_tiles_hsplitcontainer, "TileAtlasView", false
-	)
 	tilemap_tiles_toolbar = tilemap_flow_container.get_child(1)
+	tilemap_tiles_toolbar_buttons.assign(tilemap_tiles_toolbar.find_children("", "Button", true, false))
+	tilemap_tiles_toolbar_select_button = tilemap_tiles_toolbar_buttons[0]
+	tilemap_tiles_toolbar_paint_button = tilemap_tiles_toolbar_buttons[1]
+	tilemap_tiles_toolbar_line_button = tilemap_tiles_toolbar_buttons[2]
+	tilemap_tiles_toolbar_rect_button = tilemap_tiles_toolbar_buttons[3]
+	tilemap_tiles_toolbar_bucket_button = tilemap_tiles_toolbar_buttons[4]
+	tilemap_tiles_toolbar_picker_button = tilemap_tiles_toolbar_buttons[5]
+	tilemap_tiles_toolbar_eraser_button = tilemap_tiles_toolbar_buttons[6]
+	tilemap_tiles_toolbar_rotate_left_button = tilemap_tiles_toolbar_buttons[7]
+	tilemap_tiles_toolbar_rotate_right_button = tilemap_tiles_toolbar_buttons[8]
+	tilemap_tiles_toolbar_flip_h_button = tilemap_tiles_toolbar_buttons[9]
+	tilemap_tiles_toolbar_flip_v_button = tilemap_tiles_toolbar_buttons[10]
+	tilemap_tiles_toolbar_contiguous_button = tilemap_tiles_toolbar_buttons[11]
+	tilemap_tiles_toolbar_random_button = tilemap_tiles_toolbar_buttons[12]
+	tilemap_tiles_atlas_view = Utils.find_child_by_type(tilemap_tiles_hsplitcontainer, "TileAtlasView", false)
+	tilemap_tiles_atlas_view_zoom_widget = Utils.find_child_by_type(tilemap_tiles_atlas_view, "EditorZoomWidget")
+	tilemap_tiles_atlas_view_zoom_out_button = tilemap_tiles_atlas_view_zoom_widget.get_child(0)
+	tilemap_tiles_atlas_view_zoom_reset_button = tilemap_tiles_atlas_view_zoom_widget.get_child(1)
+	tilemap_tiles_atlas_view_zoom_in_button = tilemap_tiles_atlas_view_zoom_widget.get_child(2)
+	tilemap_tiles_atlas_view_center_button = tilemap_tiles_atlas_view.get_child(2)
 
 	tilemap_patterns_panel = tilemap.get_child(3)
 	tilemap_terrains_panel = tilemap.get_child(4)
@@ -532,7 +588,14 @@ func _init() -> void:
 	tilemap_terrains_tree = Utils.find_child_by_type(tilemap_terrains_hsplitcontainer, "Tree")
 	tilemap_terrains_tiles = Utils.find_child_by_type(tilemap_terrains_hsplitcontainer, "ItemList")
 	tilemap_terrains_toolbar = tilemap_flow_container.get_child(2)
-	tilemap_terrains_tool_draw = tilemap_terrains_toolbar.get_child(0).get_child(0)
+	tilemap_terrains_toolbar_buttons.assign(tilemap_terrains_toolbar.find_children("", "Button", true, false))
+	tilemap_terrains_toolbar_paint_button = tilemap_terrains_toolbar_buttons[0]
+	tilemap_terrains_toolbar_line_button = tilemap_terrains_toolbar_buttons[1]
+	tilemap_terrains_toolbar_rect_button = tilemap_terrains_toolbar_buttons[2]
+	tilemap_terrains_toolbar_bucket_button = tilemap_terrains_toolbar_buttons[3]
+	tilemap_terrains_toolbar_picker_button = tilemap_terrains_toolbar_buttons[4]
+	tilemap_terrains_toolbar_eraser_button = tilemap_terrains_toolbar_buttons[5]
+	tilemap_terrains_toolbar_contiguous_button = tilemap_terrains_toolbar_buttons[6]
 
 	tilemap_panels = [tilemap_tiles_panel, tilemap_patterns_panel, tilemap_terrains_panel]
 
@@ -580,8 +643,9 @@ func _init() -> void:
 		canvas_item_editor_toolbar_group_button: ["canvas_item_editor_toolbar_group_button", "Group"],
 		canvas_item_editor_toolbar_ungroup_button: ["canvas_item_editor_toolbar_ungroup_button", "Ungroup"],
 		canvas_item_editor_toolbar_skeleton_options_button: ["canvas_item_editor_toolbar_skeleton_options_button", "Bone"],
-		canvas_item_editor_zoom_button_lower: ["canvas_item_editor_zoom_button_lower", "ZoomLess"],
-		canvas_item_editor_zoom_button_increase: ["canvas_item_editor_zoom_button_increase", "ZoomMore"],
+		canvas_item_editor_zoom_out_button: ["canvas_item_editor_zoom_out_button", "ZoomLess"],
+		canvas_item_editor_zoom_reset_button: ["canvas_item_editor_zoom_reset_button", "ZoomReset"],
+		canvas_item_editor_zoom_in_button: ["canvas_item_editor_zoom_in_button", "ZoomMore"],
 		spatial_editor_toolbar_select_button: ["spatial_editor_toolbar_select_button", "ToolSelect"],
 		spatial_editor_toolbar_move_button: ["spatial_editor_toolbar_move_button", "ToolMove"],
 		spatial_editor_toolbar_rotate_button: ["spatial_editor_toolbar_rotate_button", "ToolRotate"],
@@ -597,10 +661,9 @@ func _init() -> void:
 		spatial_editor_toolbar_sun_button: ["spatial_editor_toolbar_sun_button", "PreviewSun"],
 		spatial_editor_toolbar_environment_button: ["spatial_editor_toolbar_environment_button", "PreviewEnvironment"],
 		spatial_editor_toolbar_sun_environment_button: ["spatial_editor_toolbar_sun_environment_button", "GuiTabMenuHl"],
-		scene_dock_button_add: ["scene_dock_button_add", "Add"],
+		scene_dock_add_button: ["scene_dock_add_button", "Add"],
 		node_dock_signals_button: ["node_dock_signals_button", "Signals"],
 		node_dock_groups_button: ["node_dock_groups_button", "Groups"],
-		tilemap_terrains_tool_draw: ["tilemap_terrains_tool_draw", "Edit"],
 		spriteframes_animation_toolbar_add_animation_button: ["spriteframes_animation_toolbar_add_animation_button", "New"],
 		spriteframes_animation_toolbar_duplicate_animation_button: ["spriteframes_animation_toolbar_duplicate_animation_button", "Duplicate"],
 		spriteframes_animation_toolbar_delete_animation_button: ["spriteframes_animation_toolbar_delete_animation_button", "Remove"],
@@ -623,6 +686,33 @@ func _init() -> void:
 		spriteframes_frames_toolbar_zoom_out_button: ["spriteframes_frames_toolbar_zoom_out_button", "ZoomLess"],
 		spriteframes_frames_toolbar_zoom_reset_button: ["spriteframes_frames_toolbar_zoom_reset_button", "ZoomReset"],
 		spriteframes_frames_toolbar_zoom_in_button: ["spriteframes_frames_toolbar_zoom_in_button", "ZoomMore"],
+		tilemap_previous_button: ["tilemap_previous_button", "MoveUp"],
+		tilemap_next_button: ["tilemap_next_button", "MoveDown"],
+		tilemap_highlight_button: ["tilemap_highlight_button", "TileMapHighlightSelected"],
+		tilemap_grid_button: ["tilemap_grid_button", "Grid"],
+		tilemap_menu_button: ["tilemap_menu_button", "Tools"],
+		tilemap_tiles_toolbar_select_button: ["tilemap_tiles_toolbar_select_button", "ToolSelect"],
+		tilemap_tiles_toolbar_paint_button: ["tilemap_tiles_toolbar_paint_button", "Edit"],
+		tilemap_tiles_toolbar_line_button: ["tilemap_tiles_toolbar_line_button", "Line"],
+		tilemap_tiles_toolbar_rect_button: ["tilemap_tiles_toolbar_rect_button", "Rectangle"],
+		tilemap_tiles_toolbar_bucket_button: ["tilemap_tiles_toolbar_bucket_button", "Bucket"],
+		tilemap_tiles_toolbar_picker_button: ["tilemap_tiles_toolbar_picker_button", "ColorPick"],
+		tilemap_tiles_toolbar_eraser_button: ["tilemap_tiles_toolbar_eraser_button", "Eraser"],
+		tilemap_tiles_toolbar_rotate_left_button: ["tilemap_tiles_toolbar_rotate_left_button", "RotateLeft"],
+		tilemap_tiles_toolbar_rotate_right_button: ["tilemap_tiles_toolbar_rotate_right_button", "RotateRight"],
+		tilemap_tiles_toolbar_flip_h_button: ["tilemap_tiles_toolbar_flip_h_button", "MirrorX"],
+		tilemap_tiles_toolbar_flip_v_button: ["tilemap_tiles_toolbar_flip_v_button", "MirrorY"],
+		tilemap_tiles_toolbar_random_button: ["tilemap_tiles_toolbar_random_button", "RandomNumberGenerator"],
+		tilemap_tiles_atlas_view_zoom_out_button: ["tilemap_tiles_atlas_view_zoom_out_button", "ZoomLess"],
+		tilemap_tiles_atlas_view_zoom_reset_button: ["tilemap_tiles_atlas_view_zoom_reset_button", "ZoomReset"],
+		tilemap_tiles_atlas_view_zoom_in_button: ["tilemap_tiles_atlas_view_zoom_in_button", "ZoomMore"],
+		tilemap_tiles_atlas_view_center_button: ["tilemap_tiles_atlas_view_center_button", "CenterView"],
+		tilemap_terrains_toolbar_paint_button: ["tilemap_terrains_toolbar_paint_button", "Edit"],
+		tilemap_terrains_toolbar_line_button: ["tilemap_terrains_toolbar_line_button", "Line"],
+		tilemap_terrains_toolbar_rect_button: ["tilemap_terrains_toolbar_rect_button", "Rectangle"],
+		tilemap_terrains_toolbar_bucket_button: ["tilemap_terrains_toolbar_bucket_button", "Bucket"],
+		tilemap_terrains_toolbar_picker_button: ["tilemap_terrains_toolbar_picker_button", "ColorPick"],
+		tilemap_terrains_toolbar_eraser_button: ["tilemap_terrains_toolbar_eraser_button", "Eraser"],
 	})
 
 
