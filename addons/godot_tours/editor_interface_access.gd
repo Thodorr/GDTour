@@ -198,7 +198,6 @@ var tilemap_highlight_button: Button = null
 var tilemap_grid_button: Button = null
 var tilemap_menu_button: MenuButton = null
 
-var tilemap_panels: Array[Control] = []
 var tilemap_tiles_panel: VBoxContainer = null
 var tilemap_tiles: ItemList = null
 var tilemap_tiles_toolbar: HBoxContainer = null
@@ -239,10 +238,50 @@ var tilemap_terrains_toolbar_bucket_button: Button = null
 var tilemap_terrains_toolbar_picker_button: Button = null
 var tilemap_terrains_toolbar_eraser_button: Button = null
 var tilemap_terrains_toolbar_contiguous_button: CheckBox = null
+var tilemap_panels: Array[Control] = []
 
 var tileset: Control = null
 var tileset_tabs: TabBar = null
 var tileset_tiles_panel: HSplitContainer = null
+var tileset_tiles: ItemList = null
+var tilemap_tiles_tools_sort_button: MenuButton = null
+var tileset_tiles_tools: HBoxContainer = null
+var tileset_tiles_tool_buttons: Array[Button] = []
+var tileset_tiles_tools_delete_button: Button = null
+var tileset_tiles_tools_add_button: MenuButton = null
+var tileset_tiles_tools_menu_button: MenuButton = null
+var tileset_tiles_tools_sort_button: MenuButton = null
+
+var tileset_tiles_atlas_editor: HSplitContainer = null
+var tileset_tiles_atlas_editor_tools: HBoxContainer = null
+var tileset_tiles_atlas_editor_tool_buttons: Array[Button]= []
+var tileset_tiles_atlas_editor_tools_setup_button: Button = null
+var tileset_tiles_atlas_editor_tools_select_button: Button = null
+var tileset_tiles_atlas_editor_tools_paint_button: Button = null
+
+var tileset_tiles_atlas_editor_setup: EditorInspector = null
+var tileset_tiles_atlas_editor_select: EditorInspector = null
+var tileset_tiles_atlas_editor_paint: ScrollContainer = null
+var tileset_tiles_atlas_editor_toolbar: HBoxContainer = null
+var tileset_tiles_atlas_editor_setup_toolbar_erase_button: Button = null
+var tileset_tiles_atlas_editor_setup_toolbar_menu_button: MenuButton = null
+var tileset_tiles_atlas_editor_atlas_view: Control = null
+var tileset_tiles_atlas_editor_atlas_view_zoom_widget: HBoxContainer = null
+var tileset_tiles_atlas_editor_atlas_view_zoom_out_button: Button = null
+var tileset_tiles_atlas_editor_atlas_view_zoom_reset_button: Button = null
+var tileset_tiles_atlas_editor_atlas_view_zoom_in_button: Button = null
+var tileset_tiles_atlas_editor_atlas_view_center_button: Button = null
+
+var tileset_tiles_scene_editor: HBoxContainer = null
+var tileset_tiles_scene_editor_properties: ScrollContainer = null
+var tileset_tiles_scene_editor_scene: EditorInspector = null
+var tileset_tiles_scene_editor_tile: EditorInspector = null
+var tileset_tiles_scene_editor_list: ItemList = null
+var tileset_tiles_scene_editor_list_tools: HBoxContainer = null
+var tileset_tiles_scene_editor_list_tool_buttons: Array[Button] = []
+var tileset_tiles_scene_editor_list_tools_add_button: Button = null
+var tileset_tiles_scene_editor_list_tools_delete_button: Button = null
+
 var tileset_patterns_panel: ItemList = null
 var tileset_panels: Array[Control] = []
 
@@ -289,12 +328,7 @@ func _init() -> void:
 	var editor_title_bar := Utils.find_child_by_type(base_control, "EditorTitleBar")
 	menu_bar = Utils.find_child_by_type(editor_title_bar, "MenuBar")
 
-	context_switcher = Utils.find_child_by_type(
-		editor_title_bar,
-		"HBoxContainer",
-		true,
-		func(c: HBoxContainer) -> bool: return c.get_child_count() > 1
-	)
+	context_switcher = Utils.find_child_by_type(editor_title_bar, "HBoxContainer", true, func(c: HBoxContainer) -> bool: return c.get_child_count() > 1)
 	var context_switcher_buttons := context_switcher.get_children()
 	context_switcher_2d_button = context_switcher_buttons[0]
 	context_switcher_3d_button = context_switcher_buttons[1]
@@ -320,9 +354,7 @@ func _init() -> void:
 	canvas_item_editor = Utils.find_child_by_type(main_screen, "CanvasItemEditor")
 	canvas_item_editor_viewport = Utils.find_child_by_type(canvas_item_editor, "CanvasItemEditorViewport")
 	canvas_item_editor_toolbar = canvas_item_editor.get_child(0).get_child(0).get_child(0)
-	var canvas_item_editor_toolbar_buttons := canvas_item_editor_toolbar.find_children(
-		"", "Button", false, false
-	)
+	var canvas_item_editor_toolbar_buttons := canvas_item_editor_toolbar.find_children("", "Button", false, false)
 	canvas_item_editor_toolbar_select_button = canvas_item_editor_toolbar_buttons[0]
 	canvas_item_editor_toolbar_move_button = canvas_item_editor_toolbar_buttons[1]
 	canvas_item_editor_toolbar_rotate_button = canvas_item_editor_toolbar_buttons[2]
@@ -340,9 +372,7 @@ func _init() -> void:
 	canvas_item_editor_toolbar_ungroup_button = canvas_item_editor_toolbar_buttons[14]
 	canvas_item_editor_toolbar_skeleton_options_button = canvas_item_editor_toolbar_buttons[15]
 
-	canvas_item_editor_zoom_widget = Utils.find_child_by_type(
-		canvas_item_editor_viewport, "EditorZoomWidget"
-	)
+	canvas_item_editor_zoom_widget = Utils.find_child_by_type(canvas_item_editor_viewport, "EditorZoomWidget" )
 	canvas_item_editor_zoom_out_button = canvas_item_editor_zoom_widget.get_child(0)
 	canvas_item_editor_zoom_reset_button = canvas_item_editor_zoom_widget.get_child(1)
 	canvas_item_editor_zoom_in_button = canvas_item_editor_zoom_widget.get_child(2)
@@ -361,12 +391,8 @@ func _init() -> void:
 	snap_options_scale_step_controls.assign(snap_options.get_child(4).get_children())
 
 	spatial_editor = Utils.find_child_by_type(main_screen, "Node3DEditor")
-	spatial_editor_viewports.assign(
-		spatial_editor.find_children("", "Node3DEditorViewport", true, false)
-	)
-	spatial_editor_preview_check_boxes.assign(
-		spatial_editor.find_children("", "CheckBox", true, false)
-	)
+	spatial_editor_viewports.assign(spatial_editor.find_children("", "Node3DEditorViewport", true, false))
+	spatial_editor_preview_check_boxes.assign(spatial_editor.find_children("", "CheckBox", true, false))
 	spatial_editor_cameras.assign(spatial_editor.find_children("", "Camera3D", true, false))
 	var surfaces := {}
 	for surface in spatial_editor.find_children("", "ViewportNavigationControl", true, false).map(
@@ -379,9 +405,7 @@ func _init() -> void:
 			surface.find_children("", "MenuButton", true, false)
 		)
 	spatial_editor_toolbar = spatial_editor.get_child(0).get_child(0).get_child(0)
-	var spatial_editor_toolbar_buttons := spatial_editor_toolbar.find_children(
-		"", "Button", false, false
-	)
+	var spatial_editor_toolbar_buttons := spatial_editor_toolbar.find_children("", "Button", false, false)
 	spatial_editor_toolbar_select_button = spatial_editor_toolbar_buttons[0]
 	spatial_editor_toolbar_move_button = spatial_editor_toolbar_buttons[1]
 	spatial_editor_toolbar_rotate_button = spatial_editor_toolbar_buttons[2]
@@ -414,15 +438,9 @@ func _init() -> void:
 	scene_dock_add_button = scene_dock.get_child(0).get_child(0)
 	node_create_window = Utils.find_child_by_type(scene_dock, "CreateDialog")
 	node_create_panel = Utils.find_child_by_type(node_create_window, "HSplitContainer")
-	var node_create_dialog_vboxcontainer: VBoxContainer = Utils.find_child_by_type(
-		node_create_panel, "VBoxContainer", false
-	)
-	node_create_dialog_node_tree = Utils.find_child_by_type(
-		node_create_dialog_vboxcontainer, "Tree"
-	)
-	node_create_dialog_search_bar = Utils.find_child_by_type(
-		node_create_dialog_vboxcontainer, "LineEdit"
-	)
+	var node_create_dialog_vboxcontainer: VBoxContainer = Utils.find_child_by_type(node_create_panel, "VBoxContainer", false)
+	node_create_dialog_node_tree = Utils.find_child_by_type(node_create_dialog_vboxcontainer, "Tree")
+	node_create_dialog_search_bar = Utils.find_child_by_type(node_create_dialog_vboxcontainer, "LineEdit")
 	node_create_dialog_button_create = node_create_window.get_ok_button()
 	node_create_dialog_button_cancel = node_create_window.get_cancel_button()
 	scene_tabs = Utils.find_child_by_type(scene_dock.get_parent(), "TabBar")
@@ -434,9 +452,7 @@ func _init() -> void:
 	# Left Bottom
 	filesystem_dock = Utils.find_child_by_type(base_control, "FileSystemDock")
 	filesystem_tabs = Utils.find_child_by_type(filesystem_dock.get_parent(), "TabBar")
-	filesystem_tree = Utils.find_child_by_type(
-		Utils.find_child_by_type(filesystem_dock, "SplitContainer"), "Tree"
-	)
+	filesystem_tree = Utils.find_child_by_type(Utils.find_child_by_type(filesystem_dock, "SplitContainer"), "Tree")
 
 	# Right
 	inspector_dock = Utils.find_child_by_type(base_control, "InspectorDock")
@@ -453,9 +469,7 @@ func _init() -> void:
 	signals_dialog_window = Utils.find_child_by_type(node_dock_signals_editor, "ConnectDialog")
 	signals_dialog = signals_dialog_window.get_child(0)
 	signals_dialog_tree = Utils.find_child_by_type(signals_dialog, "Tree")
-	var signals_dialog_line_edits := signals_dialog.get_child(0).find_children(
-		"", "LineEdit", true, false
-	)
+	var signals_dialog_line_edits := signals_dialog.get_child(0).find_children("", "LineEdit", true, false)
 	signals_dialog_signal_line_edit = signals_dialog_line_edits[0]
 	signals_dialog_method_line_edit = signals_dialog_line_edits[-1]
 	signals_dialog_cancel_button = signals_dialog_window.get_cancel_button()
@@ -473,9 +487,7 @@ func _init() -> void:
 	debugger = Utils.find_child_by_type(bottom_panels_vboxcontainer, "EditorDebuggerNode", false)
 	find_in_files = Utils.find_child_by_type(bottom_panels_vboxcontainer, "FindInFilesPanel", false)
 	audio_buses = Utils.find_child_by_type(bottom_panels_vboxcontainer, "EditorAudioBuses", false)
-	animation_player = Utils.find_child_by_type(
-		bottom_panels_vboxcontainer, "AnimationPlayerEditor", false
-	)
+	animation_player = Utils.find_child_by_type(bottom_panels_vboxcontainer, "AnimationPlayerEditor", false)
 	shader = Utils.find_child_by_type(bottom_panels_vboxcontainer, "WindowWrapper", false)
 	var editor_toaster := Utils.find_child_by_type(bottom_panels_vboxcontainer, "EditorToaster")
 	bottom_buttons_container = Utils.find_child_by_type(Utils.find_child_by_type(editor_toaster.get_parent(), "ScrollContainer", false), "HBoxContainer", false)
@@ -545,9 +557,7 @@ func _init() -> void:
 	spriteframes_frames_toolbar_zoom_in_button = spriteframes_frames_toolbar_controls[17]
 
 	tilemap = Utils.find_child_by_type(bottom_panels_vboxcontainer, "TileMapLayerEditor", false)
-	var tilemap_flow_container: HFlowContainer = Utils.find_child_by_type(
-		tilemap, "HFlowContainer", false
-	)
+	var tilemap_flow_container: HFlowContainer = Utils.find_child_by_type(tilemap, "HFlowContainer", false)
 	tilemap_tabs = tilemap_flow_container.get_child(0)
 	var tilemap_flow_layers_hbox := tilemap_flow_container.get_child(4)
 	tilemap_layers_button = tilemap_flow_layers_hbox.get_child(0)
@@ -559,7 +569,8 @@ func _init() -> void:
 
 	tilemap_tiles_panel = tilemap.get_child(2)
 	var tilemap_tiles_hsplitcontainer: HSplitContainer = Utils.find_child_by_type(tilemap_tiles_panel, "HSplitContainer", false)
-	tilemap_tiles = Utils.find_child_by_type(tilemap_tiles_hsplitcontainer, "ItemList")
+	tilemap_tiles = Utils.find_child_by_type(tilemap_tiles_hsplitcontainer.get_child(0), "ItemList")
+	tilemap_tiles_tools_sort_button = tilemap_tiles_hsplitcontainer.get_child(0).get_child(1).get_child(0)
 	tilemap_tiles_toolbar = tilemap_flow_container.get_child(1)
 	tilemap_tiles_toolbar_buttons.assign(tilemap_tiles_toolbar.find_children("", "Button", true, false))
 	tilemap_tiles_toolbar_select_button = tilemap_tiles_toolbar_buttons[0]
@@ -602,6 +613,45 @@ func _init() -> void:
 	tileset = Utils.find_child_by_type(bottom_panels_vboxcontainer, "TileSetEditor", false)
 	tileset_tabs = Utils.find_child_by_type(tileset, "TabBar")
 	tileset_tiles_panel = tileset.get_child(0).get_child(1)
+	tileset_tiles = Utils.find_child_by_type(tileset_tiles_panel.get_child(0), "ItemList", false)
+	tileset_tiles_tools = Utils.find_child_by_type(tileset_tiles_panel.get_child(0), "HBoxContainer", false)
+	tileset_tiles_tool_buttons.assign(tileset_tiles_tools.get_children())
+	tileset_tiles_tools_delete_button = tileset_tiles_tool_buttons[0]
+	tileset_tiles_tools_add_button = tileset_tiles_tool_buttons[1]
+	tileset_tiles_tools_menu_button = tileset_tiles_tool_buttons[2]
+	tileset_tiles_tools_sort_button = tileset_tiles_tool_buttons[3]
+
+	tileset_tiles_atlas_editor = Utils.find_child_by_type(tileset_tiles_panel, "TileSetAtlasSourceEditor")
+	tileset_tiles_atlas_editor_tools = tileset_tiles_atlas_editor.get_child(0).get_child(0)
+	tileset_tiles_atlas_editor_tool_buttons.assign(tileset_tiles_atlas_editor_tools.get_children())
+	tileset_tiles_atlas_editor_tools_setup_button = tileset_tiles_atlas_editor_tool_buttons[0]
+	tileset_tiles_atlas_editor_tools_select_button = tileset_tiles_atlas_editor_tool_buttons[1]
+	tileset_tiles_atlas_editor_tools_paint_button = tileset_tiles_atlas_editor_tool_buttons[2]
+	tileset_tiles_atlas_editor_setup = tileset_tiles_atlas_editor.get_child(0).get_child(4)
+	tileset_tiles_atlas_editor_select = tileset_tiles_atlas_editor.get_child(0).get_child(1)
+	tileset_tiles_atlas_editor_paint = tileset_tiles_atlas_editor.get_child(0).get_child(3)
+	var tileset_tiles_atlas_editor_right: VBoxContainer = tileset_tiles_atlas_editor.get_child(1)
+	tileset_tiles_atlas_editor_toolbar = tileset_tiles_atlas_editor_right.get_child(0)
+	tileset_tiles_atlas_editor_setup_toolbar_erase_button = tileset_tiles_atlas_editor_toolbar.get_child(1)
+	tileset_tiles_atlas_editor_setup_toolbar_menu_button = tileset_tiles_atlas_editor_toolbar.get_child(2)
+	tileset_tiles_atlas_editor_atlas_view = Utils.find_child_by_type(tileset_tiles_atlas_editor_right, "TileAtlasView")
+	tileset_tiles_atlas_editor_atlas_view_zoom_widget = Utils.find_child_by_type(tileset_tiles_atlas_editor_atlas_view, "EditorZoomWidget")
+	tileset_tiles_atlas_editor_atlas_view_zoom_out_button = tileset_tiles_atlas_editor_atlas_view_zoom_widget.get_child(0)
+	tileset_tiles_atlas_editor_atlas_view_zoom_reset_button = tileset_tiles_atlas_editor_atlas_view_zoom_widget.get_child(1)
+	tileset_tiles_atlas_editor_atlas_view_zoom_in_button = tileset_tiles_atlas_editor_atlas_view_zoom_widget.get_child(2)
+	tileset_tiles_atlas_editor_atlas_view_center_button = tileset_tiles_atlas_editor_atlas_view.get_child(2)
+
+	tileset_tiles_scene_editor = Utils.find_child_by_type(tileset_tiles_panel, "TileSetScenesCollectionSourceEditor")
+	tileset_tiles_scene_editor_properties = tileset_tiles_scene_editor.get_child(0).get_child(0)
+	var tileset_tiles_scene_editor_inspectors := tileset_tiles_scene_editor.find_children("", "EditorInspector", true, false)
+	tileset_tiles_scene_editor_scene = tileset_tiles_scene_editor_inspectors[0]
+	tileset_tiles_scene_editor_tile = tileset_tiles_scene_editor_inspectors[1]
+	tileset_tiles_scene_editor_list = tileset_tiles_scene_editor.get_child(0).get_child(1).get_child(0)
+	tileset_tiles_scene_editor_list_tools = tileset_tiles_scene_editor.get_child(0).get_child(1).get_child(1)
+	tileset_tiles_scene_editor_list_tool_buttons.assign(tileset_tiles_scene_editor_list_tools.get_children())
+	tileset_tiles_scene_editor_list_tools_add_button = tileset_tiles_scene_editor_list_tool_buttons[0]
+	tileset_tiles_scene_editor_list_tools_delete_button = tileset_tiles_scene_editor_list_tool_buttons[1]
+
 	tileset_patterns_panel = tileset.get_child(0).get_child(2)
 	tileset_panels = [tileset_tiles_panel, tileset_patterns_panel]
 
@@ -644,7 +694,6 @@ func _init() -> void:
 		canvas_item_editor_toolbar_ungroup_button: ["canvas_item_editor_toolbar_ungroup_button", "Ungroup"],
 		canvas_item_editor_toolbar_skeleton_options_button: ["canvas_item_editor_toolbar_skeleton_options_button", "Bone"],
 		canvas_item_editor_zoom_out_button: ["canvas_item_editor_zoom_out_button", "ZoomLess"],
-		canvas_item_editor_zoom_reset_button: ["canvas_item_editor_zoom_reset_button", "ZoomReset"],
 		canvas_item_editor_zoom_in_button: ["canvas_item_editor_zoom_in_button", "ZoomMore"],
 		spatial_editor_toolbar_select_button: ["spatial_editor_toolbar_select_button", "ToolSelect"],
 		spatial_editor_toolbar_move_button: ["spatial_editor_toolbar_move_button", "ToolMove"],
@@ -704,7 +753,6 @@ func _init() -> void:
 		tilemap_tiles_toolbar_flip_v_button: ["tilemap_tiles_toolbar_flip_v_button", "MirrorY"],
 		tilemap_tiles_toolbar_random_button: ["tilemap_tiles_toolbar_random_button", "RandomNumberGenerator"],
 		tilemap_tiles_atlas_view_zoom_out_button: ["tilemap_tiles_atlas_view_zoom_out_button", "ZoomLess"],
-		tilemap_tiles_atlas_view_zoom_reset_button: ["tilemap_tiles_atlas_view_zoom_reset_button", "ZoomReset"],
 		tilemap_tiles_atlas_view_zoom_in_button: ["tilemap_tiles_atlas_view_zoom_in_button", "ZoomMore"],
 		tilemap_tiles_atlas_view_center_button: ["tilemap_tiles_atlas_view_center_button", "CenterView"],
 		tilemap_terrains_toolbar_paint_button: ["tilemap_terrains_toolbar_paint_button", "Edit"],
@@ -713,7 +761,21 @@ func _init() -> void:
 		tilemap_terrains_toolbar_bucket_button: ["tilemap_terrains_toolbar_bucket_button", "Bucket"],
 		tilemap_terrains_toolbar_picker_button: ["tilemap_terrains_toolbar_picker_button", "ColorPick"],
 		tilemap_terrains_toolbar_eraser_button: ["tilemap_terrains_toolbar_eraser_button", "Eraser"],
-	})
+		tileset_tiles_tools_delete_button: ["tileset_tiles_tools_delete_button", "Remove"],
+		tileset_tiles_tools_add_button: ["tileset_tiles_tools_add_button", "Add"],
+		tileset_tiles_tools_menu_button: ["tileset_tiles_tools_menu_button", "GuiTabMenuHl"],
+		tileset_tiles_tools_sort_button: ["tileset_tiles_tools_sort_button", "Sort"],
+		tileset_tiles_atlas_editor_tools_setup_button: ["tileset_tiles_atlas_editor_tools_setup_button", "Tools"],
+		tileset_tiles_atlas_editor_tools_select_button: ["tileset_tiles_atlas_editor_tools_select_button", "ToolSelect"],
+		tileset_tiles_atlas_editor_tools_paint_button: ["tileset_tiles_atlas_editor_tools_paint_button", "Paint"],
+		tileset_tiles_atlas_editor_setup_toolbar_erase_button: ["tileset_tiles_atlas_editor_setup_toolbar_erase_button", "Eraser"],
+		tileset_tiles_atlas_editor_setup_toolbar_menu_button: ["tileset_tiles_atlas_editor_setup_toolbar_menu_button", "GuiTabMenuHl"],
+		tileset_tiles_atlas_editor_atlas_view_zoom_out_button: ["tileset_tiles_atlas_editor_atlas_view_zoom_out_button", "ZoomLess"],
+		tileset_tiles_atlas_editor_atlas_view_zoom_in_button: ["tileset_tiles_atlas_editor_atlas_view_zoom_in_button", "ZoomMore"],
+		tileset_tiles_atlas_editor_atlas_view_center_button: ["tileset_tiles_atlas_editor_atlas_view_center_button", "CenterView"],
+		tileset_tiles_scene_editor_list_tools_add_button: ["tileset_tiles_scene_editor_list_tools_add_button", "Add"],
+		tileset_tiles_scene_editor_list_tools_delete_button: ["tileset_tiles_scene_editor_list_tools_delete_button", "Remove"],
+})
 
 
 func clean_up() -> void:
@@ -763,7 +825,9 @@ func check_button_icons(buttons_info: Dictionary[Button, Array]) -> void:
 		var button_name: StringName = buttons_info[button][0]
 		var icon_name: StringName = buttons_info[button][1]
 		var editor_has_icon := editor_theme.has_icon(icon_name, "EditorIcons")
-		if editor_has_icon and button.icon != editor_theme.get_icon(icon_name, "EditorIcons"):
+		if editor_has_icon and button != null and button.icon != editor_theme.get_icon(icon_name, "EditorIcons"):
 			push_warning("Button `%s` should have `%s` icon, but doesn't!" % [button_name, icon_name])
+		elif button == null:
+			push_warning("Button `%s` is null!" % button_name)
 		elif not editor_has_icon:
 			push_warning("Icon `%s` doesn't exist in the `EditorIcons` theme type! Check for typos." % icon_name)
