@@ -220,7 +220,7 @@ func on_tour_step_changed(index: int) -> void:
 	if index == 0:
 		back_button.visible = false
 		next_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER | Control.SIZE_EXPAND
-		next_button.theme_type_variation = "NextButton"
+		next_button.theme_type_variation = "BoxButton"
 	elif index == step_count - 1:
 		next_button.visible = false
 		finish_button.visible = true
