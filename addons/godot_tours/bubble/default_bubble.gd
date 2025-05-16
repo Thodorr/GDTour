@@ -49,6 +49,7 @@ var regex_class := RegEx.new()
 @onready var footer_rich_text_label: RichTextLabel = %FooterRichTextLabel
 @onready var footer_spacer: Control = %FooterSpacer
 @onready var main_v_box_container: VBoxContainer = %MainVBoxContainer
+@onready var tasks_margin_container: MarginContainer = %TasksMarginContainer
 @onready var tasks_v_box_container: VBoxContainer = %TasksVBoxContainer
 
 @onready var buttons_panel_container: PanelContainer = %ButtonsPanelContainer
@@ -138,7 +139,7 @@ func _ready() -> void:
 	finish_button.pressed.connect(finish_requested.emit)
 	info_rich_text_label.finished.connect(_on_info_rich_text_label_finished)
 
-	for node in [header_rich_text_label, main_v_box_container, tasks_v_box_container, footer_rich_text_label, footer_spacer]:
+	for node in [header_rich_text_label, main_v_box_container, tasks_margin_container, footer_rich_text_label, footer_spacer]:
 		node.visible = false
 
 	paragraph_separation *= editor_scale
@@ -244,6 +245,8 @@ func clear_elements_and_tasks() -> void:
 	for control in [main_v_box_container, tasks_v_box_container]:
 		for node in control.get_children():
 			node.queue_free()
+
+	for control in [main_v_box_container, tasks_margin_container]:
 		control.visible = false
 
 
@@ -297,7 +300,7 @@ func add_video(stream: VideoStream) -> void:
 
 
 func add_task(description: String, repeat: int, repeat_callable: Callable, error_predicate: Callable) -> void:
-	tasks_v_box_container.visible = true
+	tasks_margin_container.visible = true
 	var task := TaskPackedScene.instantiate()
 	tasks_v_box_container.add_child(task)
 	task.status_changed.connect(check_tasks)

@@ -133,11 +133,9 @@ func clean_up() -> void:
 func set_index(value: int) -> void:
 	log.reopen()
 	var step_count := steps.size()
-	var stride := Direction.BACK if value < index else Direction.NEXT
 	value = clampi(value, -1, step_count)
-	for index in range(index + stride, clampi(value + stride, -1, step_count), stride):
-		log.info("[step_commands: %d]\n%s" % [index, interface.logger_rich_text_label.get_parsed_text()])
-		run(steps[index])
+	log.info("[step_commands: %d]\n%s" % [value, interface.logger_rich_text_label.get_parsed_text()])
+	run(steps[value])
 	index = clampi(value, 0, step_count - 1)
 	step_changed.emit(index)
 
