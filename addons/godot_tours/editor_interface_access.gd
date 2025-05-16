@@ -50,6 +50,7 @@ var canvas_item_editor_toolbar_unlock_button: Button = null
 var canvas_item_editor_toolbar_group_button: Button = null
 var canvas_item_editor_toolbar_ungroup_button: Button = null
 var canvas_item_editor_toolbar_skeleton_options_button: Button = null
+var canvas_item_editor_center_button: Button = null
 ## Parent container of the zoom buttons in the top-left of the 2D editor.
 var canvas_item_editor_zoom_widget: Control = null
 ## Lower zoom button in the top-left of the 2D viewport.
@@ -376,6 +377,7 @@ func _init() -> void:
 	canvas_item_editor_zoom_out_button = canvas_item_editor_zoom_widget.get_child(0)
 	canvas_item_editor_zoom_reset_button = canvas_item_editor_zoom_widget.get_child(1)
 	canvas_item_editor_zoom_in_button = canvas_item_editor_zoom_widget.get_child(2)
+	canvas_item_editor_center_button = canvas_item_editor_zoom_widget.get_parent().get_child(0)
 
 	snap_options_window = Utils.find_child_by_type(base_control, "SnapDialog")
 	snap_options = snap_options_window.get_child(0)
@@ -693,6 +695,7 @@ func _init() -> void:
 		canvas_item_editor_toolbar_group_button: ["canvas_item_editor_toolbar_group_button", "Group"],
 		canvas_item_editor_toolbar_ungroup_button: ["canvas_item_editor_toolbar_ungroup_button", "Ungroup"],
 		canvas_item_editor_toolbar_skeleton_options_button: ["canvas_item_editor_toolbar_skeleton_options_button", "Bone"],
+		canvas_item_editor_center_button: ["canvas_item_editor_center_button", "CenterView"],
 		canvas_item_editor_zoom_out_button: ["canvas_item_editor_zoom_out_button", "ZoomLess"],
 		canvas_item_editor_zoom_in_button: ["canvas_item_editor_zoom_in_button", "ZoomMore"],
 		spatial_editor_toolbar_select_button: ["spatial_editor_toolbar_select_button", "ToolSelect"],

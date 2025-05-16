@@ -14,6 +14,7 @@ static var group := ButtonGroup.new()
 		if not label_free:
 			await ready
 		label_free.visible = is_free
+
 @export var title := "":
 	set(value):
 		title = value
@@ -48,7 +49,8 @@ var tour_path := ""
 
 
 func setup(tour_entry: GodotTourEntry) -> void:
-	self.tour_path = tour_entry.tour_path
+	var tour_id := ResourceUID.text_to_id(tour_entry.tour_path)
+	tour_path = ResourceUID.get_id_path(tour_id) if ResourceUID.has_id(tour_id) else tour_entry.tour_path
 	title = tour_entry.title
 	is_free = tour_entry.is_free
 	is_locked = tour_entry.is_locked
