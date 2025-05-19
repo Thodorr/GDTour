@@ -652,17 +652,19 @@ func bubble_add_task_press_button(button: Button, description := "") -> void:
 ## - description: Optional custom task description. If empty, automatically generates
 ##   a description like "Turn the [ButtonName] button ON/OFF."
 func bubble_add_task_toggle_button(button: Button, is_toggled := true, description := "") -> void:
-	var text := button.tooltip_text if button.text.is_empty() else button.text
-	text = text.replace(".", "")
-
 	if not button.toggle_mode:
 		warn("[b]'button(=%s)'[/b] at [b]'path(=%s)'[/b] doesn't have toggle_mode ON." % [str(button), button.get_path()], "bubble_add_task_toggle_button")
 		return
 
 	const TOGGLE_MAP := {true: "ON", false: "OFF"}
-	if description.is_empty():
-		description = gtr("Turn the [b]%s[/b] button %s.") % [text, TOGGLE_MAP[is_toggled]]
-
+	var text: String = description
+	if text.is_empty():
+		if button.text.is_empty():
+			text = button.tooltip_text
+		else:
+			text = button.text
+	text = text.replace(".", "")
+	description = gtr("Turn the [b]%s[/b] button %s.") % [text, TOGGLE_MAP[is_toggled]]
 	bubble_add_task(
 		description,
 		1,

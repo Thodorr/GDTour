@@ -201,6 +201,7 @@ var tilemap_menu_button: MenuButton = null
 
 var tilemap_tiles_panel: VBoxContainer = null
 var tilemap_tiles: ItemList = null
+var tilemap_tiles_tools_sort_button: MenuButton = null
 var tilemap_tiles_toolbar: HBoxContainer = null
 var tilemap_tiles_toolbar_buttons: Array[Control] = []
 var tilemap_tiles_toolbar_select_button: Button = null
@@ -245,7 +246,6 @@ var tileset: Control = null
 var tileset_tabs: TabBar = null
 var tileset_tiles_panel: HSplitContainer = null
 var tileset_tiles: ItemList = null
-var tilemap_tiles_tools_sort_button: MenuButton = null
 var tileset_tiles_tools: HBoxContainer = null
 var tileset_tiles_tool_buttons: Array[Button] = []
 var tileset_tiles_tools_delete_button: Button = null
