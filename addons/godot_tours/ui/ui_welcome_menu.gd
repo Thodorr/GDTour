@@ -8,8 +8,7 @@ signal tour_reset_requested(tour_path: String)
 signal closed
 
 const UISelectableTour = preload("ui_selectable_tour.gd")
-const GodotTourEntry = preload("../godot_tour_entry.gd")
-const GodotTourList = preload("../godot_tour_list.gd")
+const GDTourMetadata = preload("../gdtour_metadata.gd")
 const Tour := preload("../tour.gd")
 const Utils := preload("../utils.gd")
 const TranslationService := preload("../translation/translation_service.gd")
@@ -45,7 +44,7 @@ func _ready() -> void:
 	button_reset_yes.show()
 
 
-func setup(translation_service: TranslationService, tour_list: GodotTourList) -> void:
+func setup(translation_service: TranslationService, tour_metadata: GDTourMetadata) -> void:
 	Utils.update_locale(translation_service, {
 		label_title: {text = "Welcome to Godot Tour!"},
 		button_start_learning: {text = "START LEARNING"},
@@ -82,7 +81,7 @@ func setup(translation_service: TranslationService, tour_list: GodotTourList) ->
 		view_reset_confirmation.hide()
 	)
 
-	for tour_entry: GodotTourEntry in tour_list.tours:
+	for tour_entry: GDTourMetadata.TourMetadata in tour_metadata.list:
 		var selectable_tour: UISelectableTour = UISelectableTourPackedScene.instantiate()
 		tours_column.add_child(selectable_tour)
 		selectable_tour.setup(tour_entry)

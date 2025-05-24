@@ -2,7 +2,7 @@
 @tool
 extends Control
 
-const GodotTourEntry = preload("../godot_tour_entry.gd")
+const GDTourMetadata = preload("../gdtour_metadata.gd")
 
 const COLOR_DISABLED_TEXT := Color(0.51764708757401, 0.59607845544815, 0.74509805440903)
 
@@ -48,7 +48,7 @@ var tour_path := ""
 @onready var button: Button = %Button
 
 
-func setup(tour_entry: GodotTourEntry) -> void:
+func setup(tour_entry: GDTourMetadata.TourMetadata) -> void:
 	var tour_id := ResourceUID.text_to_id(tour_entry.tour_path)
 	tour_path = ResourceUID.get_id_path(tour_id) if ResourceUID.has_id(tour_id) else tour_entry.tour_path
 	title = tour_entry.title
