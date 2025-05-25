@@ -38,7 +38,7 @@ Please be patient and try the following:
 		paragraph_separation = new_value
 		if main_v_box_container == null:
 			await ready
-		main_v_box_container.add_theme_constant_override("separation", paragraph_separation)
+		main_v_box_container.add_theme_constant_override("separation", paragraph_separation * EditorInterface.get_editor_scale()) 
 
 var img_size := 24 * EditorInterface.get_editor_scale()
 var regex_class := RegEx.new()
