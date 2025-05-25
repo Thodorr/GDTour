@@ -94,8 +94,6 @@ func setup(translation_service: TranslationService, tour_metadata: GDTourMetadat
 		ThemeUtils.scale_margin_container_margins(margin_container)
 		for button: BaseButton in [button_reset_selected, button_close]:
 			button.custom_minimum_size *= editor_scale
-		for color_rect: ColorRect in button_close.get_children():
-			color_rect.scale = editor_scale * Vector2.ONE
 
 	if tours_column.get_child_count() > 0:
 		tours_column.get_child(0).select()
