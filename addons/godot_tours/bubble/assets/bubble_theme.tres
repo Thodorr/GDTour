@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=31 format=3 uid="uid://cx2cxgbadh7fg"]
+[gd_resource type="Theme" load_steps=29 format=3 uid="uid://cx2cxgbadh7fg"]
 
 [ext_resource type="FontFile" uid="uid://cja70uk8veutj" path="res://addons/godot_tours/assets/fonts/open_sans.ttf" id="1_lfodo"]
 [ext_resource type="FontFile" uid="uid://cxeo2n3ky21xb" path="res://addons/godot_tours/assets/fonts/mukta_bold.ttf" id="2_dcrkv"]
+[ext_resource type="StyleBox" uid="uid://dyec2bgyiwwuk" path="res://addons/godot_tours/ui/button_next_stylebox.tres" id="3_bnv2w"]
 [ext_resource type="FontFile" uid="uid://c3xincxynype7" path="res://addons/godot_tours/assets/fonts/hasklug_nerd_mono.otf" id="3_q3s3n"]
 [ext_resource type="FontFile" uid="uid://b0egmv7mkouwp" path="res://addons/godot_tours/assets/fonts/poppins_bold.ttf" id="3_xuvjh"]
 [ext_resource type="FontFile" uid="uid://cowlnwvq0rikj" path="res://addons/godot_tours/assets/fonts/poppins_italic.ttf" id="4_th3qn"]
@@ -84,42 +85,6 @@ draw_center = false
 draw_center = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k5cck"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqte8"]
-bg_color = Color(1, 0.835294, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_left = 10.0
-expand_margin_right = 10.0
-shadow_color = Color(0.807843, 0.486275, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cifm0"]
-bg_color = Color(1, 0.835294, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-shadow_color = Color(0.807843, 0.486275, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a8pem"]
-bg_color = Color(1, 0.835294, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_left = 10.0
-expand_margin_right = 10.0
-shadow_color = Color(0.807843, 0.486275, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ht4iy"]
 bg_color = Color(0.0823529, 0.133333, 0.239216, 1)
@@ -235,9 +200,9 @@ NextButton/colors/font_hover_color = Color(0.415686, 0.0980392, 0, 1)
 NextButton/colors/font_hover_pressed_color = Color(0.415686, 0.0980392, 0, 1)
 NextButton/colors/font_pressed_color = Color(0.415686, 0.0980392, 0, 1)
 NextButton/styles/focus = SubResource("StyleBoxEmpty_k5cck")
-NextButton/styles/hover = SubResource("StyleBoxFlat_kqte8")
-NextButton/styles/normal = SubResource("StyleBoxFlat_cifm0")
-NextButton/styles/pressed = SubResource("StyleBoxFlat_a8pem")
+NextButton/styles/hover = ExtResource("3_bnv2w")
+NextButton/styles/normal = ExtResource("3_bnv2w")
+NextButton/styles/pressed = ExtResource("3_bnv2w")
 OutlinePanelContainer/base_type = &"PanelContainer"
 OutlinePanelContainer/styles/panel = SubResource("StyleBoxFlat_ht4iy")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_7nwh6")
