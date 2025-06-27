@@ -58,7 +58,7 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"WelcomeMenuTitleLabel"
-text = "Welcome to Godot Tour!"
+text = "Welcome to GDTour!"
 
 [node name="ToursColumn" type="VBoxContainer" parent="Control/PanelContainer/MarginContainer/ViewMenu"]
 unique_name_in_owner = true

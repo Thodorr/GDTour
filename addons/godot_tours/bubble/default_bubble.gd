@@ -13,7 +13,7 @@ const CLASS_IMG := r"[img=%dx%d]res://addons/godot_tours/bubble/assets/icons/$1.
 const COMMIT_MESSAGE := """It seems you're not done with this step! [color=#FF8A00]You may get stuck later on in the Tour if you skip ahead without completing all the tasks.[/color] You can try going back one step before skipping.
 
 If you decide to skip the step, note down the tasks and do them before you start the following steps."""
-const LOG_MESSAGE := """[color=#FF8A00][b]Godot Tours[/b] is an experimental Edtech that evolves with the Godot engine and requires ongoing testing. It's not uncommon to encounter bugs.[/color]
+const LOG_MESSAGE := """[color=#FF8A00][b]GDTour[/b] is an experimental Edtech that evolves with the Godot engine and requires ongoing testing. It's not uncommon to encounter bugs.[/color]
 Please be patient and try the following:
 
 [indent]1. Check that you're using the recommended version of Godot. For this tour it’s Godot 4.3.[/indent]
@@ -38,7 +38,7 @@ Please be patient and try the following:
 		paragraph_separation = new_value
 		if main_v_box_container == null:
 			await ready
-		main_v_box_container.add_theme_constant_override("separation", paragraph_separation * EditorInterface.get_editor_scale()) 
+		main_v_box_container.add_theme_constant_override("separation", paragraph_separation * EditorInterface.get_editor_scale())
 
 var img_size := 24 * EditorInterface.get_editor_scale()
 var regex_class := RegEx.new()

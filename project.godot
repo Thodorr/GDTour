@@ -10,14 +10,14 @@ config_version=5
 
 [application]
 
-config/name="Godot Tours - GDQuest"
+config/name="GDTour - GDQuest"
 run/main_scene="uid://dkiu31kpq64co"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.png"
 
 [dotnet]
 
-project/assembly_name="Godot Tours - GDQuest"
+project/assembly_name="GDTour - GDQuest"
 
 [editor_plugins]
 

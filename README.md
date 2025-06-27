@@ -1,6 +1,6 @@
-# Godot Tours
+# GDTour
 
-Godot Tours is a framework to create interactive, step-by-step tutorials in the Godot editor.
+GDTour is a framework to create interactive, step-by-step tutorials in the Godot editor.
 
 ![Screenshot of the Godot editor, showing the blue welcome window of a GOdot interactive tour](godot-tour-screenshot.webp)
 
@@ -30,11 +30,11 @@ To register a tour in the menu that appears upon opening the Godot project, you 
 
 ## Translating tours
 
-Godot Tours supports translations in the Portable Object (PO) format. To learn how to translate tours, please refer to the [documentation on translating Godot tours](documentation/translating_godot_tours.md).
+GDTour supports translations in the Portable Object (PO) format. To learn how to translate tours, please refer to the [documentation on translating GDTour](documentation/translating_godot_tours.md).
 
 ## Features overview
 
-Godot Tours comes with these features, in the `core` folder of the addon:
+GDTour comes with these features, in the `core` folder of the addon:
 
 - The default UI Bubble which provides step-by-step instructions and explanations. It contains:
   - An optional header.
@@ -50,9 +50,9 @@ Godot Tours comes with these features, in the `core` folder of the addon:
   2. A `*.[mo,po]` files loader and mapper depending on the *Editor* language setting.
 - A Tour builder API that constructs the actual guided steps using the systems listed so far.
 
-## Using Godot Tours in Other Projects
+## Using GDTour in Other Projects
 
-Godot Tours works like any other Godot addon. You can clone or download the repository files and copy and paste the addons folder to your project.
+GDTour works like any other Godot addon. You can clone or download the repository files and copy and paste the addons folder to your project.
 
 The easiest way to keep this addon up to date is to use the addon manager [gd-plug](https://github.com/imjp94/gd-plug):
 

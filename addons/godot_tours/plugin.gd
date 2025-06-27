@@ -63,7 +63,7 @@ func _enter_tree() -> void:
 		accept_dialog.show()
 
 	if tour_metadata == null:
-		push_warning("Godot Tours: no tours found. The user interface will not be modified.")
+		push_warning("GDTour: no tours found. The user interface will not be modified.")
 		return
 
 	# Hack for `EditorInterface.open_scene_from_path()`, see: https://github.com/godotengine/godot/issues/86869
@@ -102,7 +102,7 @@ func _enter_tree() -> void:
 		toggle_debugger()
 
 
-## Adds a button labeled Godot Tours to the editor top bar, right before the run buttons.
+## Adds a button labeled GDTour to the editor top bar, right before the run buttons.
 ## This button only shows when there are tours in the project, there's no tour active, and the welcome menu is hidden.
 func _add_top_bar_button() -> void:
 	if tour_metadata == null:
@@ -215,7 +215,7 @@ func get_tours() -> GDTourMetadata:
 				return script.new()
 
 	push_warning(
-		"Godot Tours: no tours found. Create a script file at one of these paths to register tours: %s" % ", ".join(TOUR_SCRIPT_PATHS)
+		"GDTour: no tours found. Create a script file at one of these paths to register tours: %s" % ", ".join(TOUR_SCRIPT_PATHS)
 	)
 	return null
 
@@ -273,7 +273,7 @@ func _reset_tour_files(tour_path: String) -> bool:
 			var file_access := FileAccess.open(destination_file_path, FileAccess.WRITE)
 			if file_access == null:
 				push_error(
-					"Godot Tours: could not open file '%s' for writing. Resetting the tour '%s' was not successful." % [destination_file_path, tour_path]
+					"GDTour: could not open file '%s' for writing. Resetting the tour '%s' was not successful." % [destination_file_path, tour_path]
 				)
 				was_reset_successful = false
 				break
@@ -284,7 +284,7 @@ func _reset_tour_files(tour_path: String) -> bool:
 			var error := DirAccess.copy_absolute(tour_file_path, destination_file_path)
 			if error != OK:
 				push_error(
-					"Godot Tours: could not copy folder '%s' to '%s'. Resetting the tour '%s' was not successful." % [tour_file_path, destination_file_path, tour_path]
+					"GDTour: could not copy folder '%s' to '%s'. Resetting the tour '%s' was not successful." % [tour_file_path, destination_file_path, tour_path]
 				)
 				was_reset_successful = false
 				break

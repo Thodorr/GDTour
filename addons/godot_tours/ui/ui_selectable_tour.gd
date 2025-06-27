@@ -1,4 +1,4 @@
-## UI component for one tour on Godot tour's welcome menu.
+## UI component for one tour on GDTour's welcome menu.
 @tool
 extends Control
 

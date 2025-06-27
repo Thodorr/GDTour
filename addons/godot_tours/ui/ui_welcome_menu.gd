@@ -46,7 +46,7 @@ func _ready() -> void:
 
 func setup(translation_service: TranslationService, tour_metadata: GDTourMetadata) -> void:
 	Utils.update_locale(translation_service, {
-		label_title: {text = "Welcome to Godot Tour!"},
+		label_title: {text = "Welcome to GDTour!"},
 		button_start_learning: {text = "START LEARNING"},
 		button_reset_no: {text = "NO"},
 		button_reset_yes: {text = "YES"},
