@@ -1086,6 +1086,19 @@ func highlight_filesystem_paths(paths: Array[String], do_center := true, play_fl
 	queue_command(overlays.highlight_filesystem_paths, [paths, do_center, play_flash])
 
 
+## Expands a specific resource property in the Inspector dock if this property
+## has a valid resource assigned. This is useful when you need to access
+## sub-properties of a resource that are hidden when the resource is collapsed
+## in the inspector. Call this method with the [code]name[/code] of the resource
+## property you want to expand first, then call [method
+## highlight_inspector_properties] to highlight the expanded property.
+##
+## Parameters:
+## - resource_property_name: The name of the resource property to expand
+func expand_inspector_resource(resource_property_name: StringName) -> void:
+	queue_command(overlays.expand_inspector_resource, [resource_property_name])
+
+
 ## Highlights properties in the Inspector dock.
 ## This helps users find specific properties they need to modify in the currently selected node.
 ##
