@@ -312,6 +312,8 @@ var bottom_tilemap_button: Button = null
 var bottom_replication_button: Button = null
 var bottom_gridmap_button: Button = null
 var bottom_buttons: Array[Button] = []
+var bottom_pin_button: Button = null
+var bottom_expand_button: Button = null
 
 var scene_import_settings_window: ConfirmationDialog = null
 var scene_import_settings: VBoxContainer = null
@@ -492,7 +494,8 @@ func _init() -> void:
 	animation_player = Utils.find_child_by_type(bottom_panels_vboxcontainer, "AnimationPlayerEditor", false)
 	shader = Utils.find_child_by_type(bottom_panels_vboxcontainer, "WindowWrapper", false)
 	var editor_toaster := Utils.find_child_by_type(bottom_panels_vboxcontainer, "EditorToaster")
-	bottom_buttons_container = Utils.find_child_by_type(Utils.find_child_by_type(editor_toaster.get_parent(), "ScrollContainer", false), "HBoxContainer", false)
+	var bottom_h_box_container: HBoxContainer = editor_toaster.get_parent()
+	bottom_buttons_container = Utils.find_child_by_type(Utils.find_child_by_type(bottom_h_box_container, "ScrollContainer", false), "HBoxContainer", false)
 
 	bottom_buttons.assign(bottom_buttons_container.get_children())
 	bottom_output_button = bottom_buttons[0]
@@ -511,6 +514,9 @@ func _init() -> void:
 	bottom_tilemap_button = bottom_buttons[13]
 	bottom_replication_button = bottom_buttons[14]
 	bottom_gridmap_button = bottom_buttons[-1]
+
+	bottom_pin_button = bottom_h_box_container.get_child(-2)
+	bottom_expand_button = bottom_h_box_container.get_child(-1)
 
 	spriteframes = Utils.find_child_by_type(bottom_panels_vboxcontainer, "SpriteFramesEditor", false)
 	var spriteframes_containers := spriteframes.find_children("", "VBoxContainer", false, false)
@@ -666,6 +672,7 @@ func _init() -> void:
 	for window in windows:
 		window_toggle_tour_mode(window, true)
 
+	# TODO: move to a build system step instead of running it on every plugin load
 	check_button_icons({
 		context_switcher_2d_button: ["context_switcher_2d_button", "2D"],
 		context_switcher_3d_button: ["context_switcher_3d_button", "3D"],
@@ -778,6 +785,8 @@ func _init() -> void:
 		tileset_tiles_atlas_editor_atlas_view_center_button: ["tileset_tiles_atlas_editor_atlas_view_center_button", "CenterView"],
 		tileset_tiles_scene_editor_list_tools_add_button: ["tileset_tiles_scene_editor_list_tools_add_button", "Add"],
 		tileset_tiles_scene_editor_list_tools_delete_button: ["tileset_tiles_scene_editor_list_tools_delete_button", "Remove"],
+		bottom_pin_button: ["bottom_pin_button", "Pin"],
+		bottom_expand_button: ["bottom_expand_button", "ExpandBottomDock"],
 })
 
 
