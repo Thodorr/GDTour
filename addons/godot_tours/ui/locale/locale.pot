@@ -19,7 +19,7 @@ msgstr ""
 msgid "Your progress will be lost."
 msgstr ""
 
-msgid "Welcome to GDTour!"
+msgid "Welcome to Godot Tour!"
 msgstr ""
 
 msgid "START LEARNING"

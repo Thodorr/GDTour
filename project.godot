@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GDTour - GDQuest"
-run/main_scene="uid://dkiu31kpq64co"
+run/main_scene="uid://c1sacfrbrycau"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.png"
 
@@ -25,7 +25,7 @@ enabled=PackedStringArray("res://addons/godot_tours/plugin.cfg")
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://addons/godot_tours/tour.gd", "res://tours/test_tour/test_tour.gd")
+locale/translations_pot_files=PackedStringArray("res://addons/godot_tours/tour.gd", "uid://dtko5mbebl07d", "uid://ccbvkew76gf03")
 
 [rendering]
 

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bl1imsfetmu6r"]
+
+[ext_resource type="Script" uid="uid://dl3xjr2bs5rwg" path="res://addons/godot_tours/godot_tour_list.gd" id="1_i32kb"]
+
+[resource]
+script = ExtResource("1_i32kb")
+tours = [null]

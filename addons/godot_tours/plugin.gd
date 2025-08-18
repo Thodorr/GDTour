@@ -1,12 +1,12 @@
 @tool
 extends EditorPlugin
 
-## Paths to the script files from which the plugin finds and registers tours.
-## Contains a GDTourMetadata class with code to change the GDTour settings or register tours.
-const TOUR_SCRIPT_PATHS := ["res://godot_tours.gd", "res://tours/godot_tours.gd"]
+## Path to the file from which the plugin finds and registers tours.
+## Contains an array of tour entries. See the file godot_tour_entry.gd for more information.
+const TOUR_LIST_FILE_PATH := "res://godot_tours.tres"
 const SINGLE_WINDOW_MODE_PROPERTY := "interface/editor/single_window_mode"
 
-const GDTourMetadata := preload("gdtour_metadata.gd")
+const GodotTourList := preload("godot_tour_list.gd")
 const Utils := preload("utils.gd")
 const EditorInterfaceAccess := preload("editor_interface_access.gd")
 const Tour := preload("tour.gd")
@@ -36,8 +36,8 @@ var editor_interface_access: EditorInterfaceAccess = null
 var overlays: Overlays = null
 var welcome_menu: UIWelcomeMenu = null
 
-## Instance of GDTourMetadata. Contains an array of tour entries.
-var tour_metadata := get_tours()
+## Resource of type godot_tour_list.gd. Contains an array of tour entries.
+var tour_list := get_tours()
 ## Index of the currently running tour in the tour list.
 var _current_tour_index := 0
 ## File paths to the tours.
@@ -62,15 +62,15 @@ func _enter_tree() -> void:
 		accept_dialog.exclusive = false
 		accept_dialog.show()
 
-	if tour_metadata == null:
-		push_warning("GDTour: no tours found. The user interface will not be modified.")
+	if tour_list == null:
+		push_warning("Godot Tours: no tours found. The user interface will not be modified.")
 		return
 
 	# Hack for `EditorInterface.open_scene_from_path()`, see: https://github.com/godotengine/godot/issues/86869
 	for _frame in range(10):
 		await get_tree().process_frame
 
-	_tour_paths.assign(tour_metadata.list.map(func get_tour_path(tour_entry) -> String: return tour_entry.tour_path))
+	_tour_paths.assign(tour_list.tours.map(func get_tour_path(tour_entry) -> String: return tour_entry.tour_path))
 
 	await get_tree().physics_frame
 	get_viewport().mode = Window.MODE_MAXIMIZED
@@ -84,13 +84,7 @@ func _enter_tree() -> void:
 
 	# Add button to the editor top bar, right before the run buttons
 	_add_top_bar_button()
-
-	# Show welcome menu automatically if the setting is enabled
-	if tour_metadata.open_welcome_menu_automatically == true:
-		_show_welcome_menu()
-	else:
-		_button_top_bar.show()
-
+	_show_welcome_menu()
 	ensure_pot_generation(plugin_path)
 
 	var is_single_window_mode := editor_settings.get_setting(SINGLE_WINDOW_MODE_PROPERTY)
@@ -102,10 +96,10 @@ func _enter_tree() -> void:
 		toggle_debugger()
 
 
-## Adds a button labeled GDTour to the editor top bar, right before the run buttons.
+## Adds a button labeled Godot Tours to the editor top bar, right before the run buttons.
 ## This button only shows when there are tours in the project, there's no tour active, and the welcome menu is hidden.
 func _add_top_bar_button() -> void:
-	if tour_metadata == null:
+	if tour_list == null:
 		return
 
 	_button_top_bar = UIButtonGodotToursPackedScene.instantiate()
@@ -115,9 +109,9 @@ func _add_top_bar_button() -> void:
 	_button_top_bar.pressed.connect(_show_welcome_menu)
 
 
-## Shows the welcome menu, which lists all the tours registered in the script-based system.
+## Shows the welcome menu, which lists all the tours in the file res://godot_tours.tres.
 func _show_welcome_menu() -> void:
-	if tour_metadata == null and not Debugger.CLI_OPTION_DEBUG in OS.get_cmdline_user_args():
+	if tour_list == null and not Debugger.CLI_OPTION_DEBUG in OS.get_cmdline_user_args():
 		return
 
 	_button_top_bar.hide()
@@ -126,7 +120,7 @@ func _show_welcome_menu() -> void:
 	tree_exiting.connect(welcome_menu.queue_free)
 
 	EditorInterface.get_base_control().add_child(welcome_menu)
-	welcome_menu.setup(translation_service, tour_metadata)
+	welcome_menu.setup(translation_service, tour_list)
 	welcome_menu.tour_start_requested.connect(start_tour)
 	welcome_menu.tour_reset_requested.connect(func reset_tour(tour_path: String) -> void:
 		var was_reset_successful := _reset_tour_files(tour_path)
@@ -142,7 +136,7 @@ func _exit_tree() -> void:
 	if _button_top_bar != null:
 		_button_top_bar.queue_free()
 
-	if tour_metadata == null:
+	if tour_list == null:
 		return
 
 	if debugger != null:
@@ -167,7 +161,7 @@ func _input(event: InputEvent) -> void:
 
 ## Registers and unregisters translation files for the tours.
 func ensure_pot_generation(plugin_path: String, do_clean_up := false) -> void:
-	if tour_metadata == null:
+	if tour_list == null:
 		return
 
 	const key := "internationalization/locale/translations_pot_files"
@@ -205,19 +199,18 @@ func toggle_debugger() -> void:
 			_button_top_bar.hide()
 
 
-## Looks for a godot_tours.gd script file at the root or in tours/ folder of the project.
-## This file should contain tour registrations. Finds and loads the tours.
-func get_tours() -> GDTourMetadata:
-	for script_path in TOUR_SCRIPT_PATHS:
-		if FileAccess.file_exists(script_path):
-			var script = load(script_path)
-			if script != null:
-				return script.new()
-
-	push_warning(
-		"GDTour: no tours found. Create a script file at one of these paths to register tours: %s" % ", ".join(TOUR_SCRIPT_PATHS)
-	)
-	return null
+## Looks for a godot_tours.tres file at the root of the project. This file should contain an array of
+## TourMetadata. Finds and loads the tours.
+func get_tours() -> GodotTourList:
+	if not FileAccess.file_exists(TOUR_LIST_FILE_PATH):
+		push_warning(
+			(
+				"Godot Tours: no tours found. Create a GodotTourList resource file named '%s' to list and register tours."
+				% TOUR_LIST_FILE_PATH
+			)
+		)
+		return null
+	return load(TOUR_LIST_FILE_PATH)
 
 
 func start_tour(tour_index: int) -> void:
@@ -230,10 +223,10 @@ func start_tour(tour_index: int) -> void:
 		tour = null
 
 	_current_tour_index = tour_index
-	var tour_path: String = tour_metadata.list[tour_index].tour_path
+	var tour_path: String = tour_list.tours[tour_index].tour_path
 	tour = load(tour_path).new(editor_interface_access, overlays, translation_service)
 	EditorInterface.get_base_control().add_child(tour)
-	if _current_tour_index < tour_metadata.list.size() - 1:
+	if _current_tour_index < tour_list.tours.size() - 1:
 		tour.bubble.set_finish_button_text("Continue to the next tour")
 
 	tour.closed.connect(_button_top_bar.show)
@@ -241,7 +234,7 @@ func start_tour(tour_index: int) -> void:
 
 
 func _on_tour_ended() -> void:
-	if _current_tour_index < tour_metadata.list.size() - 1:
+	if _current_tour_index < tour_list.tours.size() - 1:
 		start_tour(_current_tour_index + 1)
 	else:
 		_button_top_bar.show()
@@ -273,7 +266,7 @@ func _reset_tour_files(tour_path: String) -> bool:
 			var file_access := FileAccess.open(destination_file_path, FileAccess.WRITE)
 			if file_access == null:
 				push_error(
-					"GDTour: could not open file '%s' for writing. Resetting the tour '%s' was not successful." % [destination_file_path, tour_path]
+					"Godot Tours: could not open file '%s' for writing. Resetting the tour '%s' was not successful." % [destination_file_path, tour_path]
 				)
 				was_reset_successful = false
 				break
@@ -284,7 +277,7 @@ func _reset_tour_files(tour_path: String) -> bool:
 			var error := DirAccess.copy_absolute(tour_file_path, destination_file_path)
 			if error != OK:
 				push_error(
-					"GDTour: could not copy folder '%s' to '%s'. Resetting the tour '%s' was not successful." % [tour_file_path, destination_file_path, tour_path]
+					"Godot Tours: could not copy folder '%s' to '%s'. Resetting the tour '%s' was not successful." % [tour_file_path, destination_file_path, tour_path]
 				)
 				was_reset_successful = false
 				break

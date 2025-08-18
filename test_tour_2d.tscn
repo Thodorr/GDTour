@@ -1,11 +1,39 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkiu31kpq64co"]
+[gd_scene load_steps=8 format=3 uid="uid://5i4evf7vukd1"]
 
-[ext_resource type="TileSet" uid="uid://y111l4w24pml" path="res://test_tileset.tres" id="2_i0tlh"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ras30"]
+load_path = "res://.godot/imported/obstacle.png-a9d8da6c957573aba9b0aa2de68d72f0.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tol7a"]
+texture = SubResource("CompressedTexture2D_ras30")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_soa17"]
+load_path = "res://.godot/imported/path_start.png-7707661c7686b203f89d6f51e1781158.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx51g"]
+texture = SubResource("CompressedTexture2D_soa17")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o8h2o"]
+load_path = "res://.godot/imported/path_end.png-2e4d9625560ee67e7643b9a5502cbe6b.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2sont"]
+texture = SubResource("CompressedTexture2D_o8h2o")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_vskgt"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_tol7a")
+sources/1 = SubResource("TileSetAtlasSource_gx51g")
+sources/2 = SubResource("TileSetAtlasSource_2sont")
 
 [node name="TestTour2D" type="Node2D"]
 
 [node name="NodeToEdit" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = ExtResource("2_i0tlh")
+tile_set = SubResource("TileSet_vskgt")
 format = 2

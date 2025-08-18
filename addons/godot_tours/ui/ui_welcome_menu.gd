@@ -8,7 +8,8 @@ signal tour_reset_requested(tour_path: String)
 signal closed
 
 const UISelectableTour = preload("ui_selectable_tour.gd")
-const GDTourMetadata = preload("../gdtour_metadata.gd")
+const GodotTourEntry = preload("../godot_tour_entry.gd")
+const GodotTourList = preload("../godot_tour_list.gd")
 const Tour := preload("../tour.gd")
 const Utils := preload("../utils.gd")
 const TranslationService := preload("../translation/translation_service.gd")
@@ -44,9 +45,9 @@ func _ready() -> void:
 	button_reset_yes.show()
 
 
-func setup(translation_service: TranslationService, tour_metadata: GDTourMetadata) -> void:
+func setup(translation_service: TranslationService, tour_list: GodotTourList) -> void:
 	Utils.update_locale(translation_service, {
-		label_title: {text = "Welcome to GDTour!"},
+		label_title: {text = "Welcome to Godot Tour!"},
 		button_start_learning: {text = "START LEARNING"},
 		button_reset_no: {text = "NO"},
 		button_reset_yes: {text = "YES"},
@@ -81,7 +82,7 @@ func setup(translation_service: TranslationService, tour_metadata: GDTourMetadat
 		view_reset_confirmation.hide()
 	)
 
-	for tour_entry: GDTourMetadata.TourMetadata in tour_metadata.list:
+	for tour_entry: GodotTourEntry in tour_list.tours:
 		var selectable_tour: UISelectableTour = UISelectableTourPackedScene.instantiate()
 		tours_column.add_child(selectable_tour)
 		selectable_tour.setup(tour_entry)
@@ -94,6 +95,8 @@ func setup(translation_service: TranslationService, tour_metadata: GDTourMetadat
 		ThemeUtils.scale_margin_container_margins(margin_container)
 		for button: BaseButton in [button_reset_selected, button_close]:
 			button.custom_minimum_size *= editor_scale
+		for color_rect: ColorRect in button_close.get_children():
+			color_rect.scale = editor_scale * Vector2.ONE
 
 	if tours_column.get_child_count() > 0:
 		tours_column.get_child(0).select()

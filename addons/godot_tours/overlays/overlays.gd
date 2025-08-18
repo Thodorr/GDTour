@@ -130,7 +130,6 @@ func highlight_tree_items(tree: Tree, predicate: Callable, button_index := -1, d
 	var root := tree.get_root()
 	if root == null:
 		return
-
 	var height_fix := 6 * EditorInterface.get_editor_scale()
 	for item in Utils.filter_tree_items(root, predicate):
 		interface.unfold_tree_item(item)
@@ -186,90 +185,44 @@ func highlight_filesystem_paths(paths: Array[String], do_center := true, play_fl
 	)
 
 
-## Expands a resource property in the Inspector dock by finding it by [code]name[/code].
-## This is useful when you need to access sub-properties of a resource that are hidden
-## when the resource is collapsed in the inspector. Call this method with the
-## [code]name[/code] of the resource property you want to expand first, then call
-## [method highlight_inspector_properties] to highlight the expanded property.
-func expand_inspector_resource(resource_property_name: StringName) -> void:
-	var all_properties := interface.inspector_editor.find_children("", "EditorProperty", true, false)
-	var predicate_name_matches := func predicate_name_matches(p: EditorProperty) -> bool:
-		return p.get_edited_property() == resource_property_name
-
-	var matching_index := all_properties.find_custom(predicate_name_matches)
-	if matching_index < 0:
-		push_warning(
-			"expand_inspector_resource: Could not find resource property with name '%s' in Inspector. The property could not be expanded." % resource_property_name
-		)
-		return
-	var matching_property: EditorProperty = all_properties[matching_index]
-	if matching_property.get_class() == "EditorPropertyResource":
-		# Find the EditorResourcePicker child
-		for child in matching_property.get_children():
-			if child is not EditorResourcePicker or child.edited_resource == null:
-				continue
-
-			# Find the button that expands/collapses the resource
-			for resource_child in child.get_children():
-				if resource_child is not Button:
-					continue
-				if resource_child.button_pressed:
-					# If the button is already pressed, we assume the resource
-					# is expanded and we don't need to do anything
-					return
-				resource_child.button_pressed = true
-				resource_child.pressed.emit()
-				return
-
-
 ## Highlights Inspector dock properties by (programmatic) [code]name[/code]. See [method highlight_tree_items]
 ## for [code]play_flash[/code].
 func highlight_inspector_properties(names: Array[StringName], do_center := true, play_flash := false) -> void:
 	var scroll_offset := 200 * EditorInterface.get_editor_scale()
 	var all_properties := interface.inspector_editor.find_children("", "EditorProperty", true, false)
-	for current_name in names:
-		var predicate_name_matches := func predicate_name_matches(p: EditorProperty) -> bool:
-			return p.get_edited_property() == current_name
+	for n in names:
+		var predicate_first := func predicate_first(p: EditorProperty) -> bool:
+			return p.get_edited_property() == n
 
-		var matching_index := all_properties.find_custom(predicate_name_matches)
-		if matching_index < 0:
-			continue
-		var matching_property: EditorProperty = all_properties[matching_index]
-		# Unfold parent sections recursively if necessary.
-		var current_parent := matching_property.get_parent()
-		const MAX_ITERATION_COUNT := 10
-		for i in MAX_ITERATION_COUNT:
-			var parent_class := current_parent.get_class()
-			if parent_class == "EditorInspectorSection":
-				current_parent.unfold()
-
-			current_parent = current_parent.get_parent()
-			if current_parent == interface.inspector_editor:
-				break
-
-		if do_center:
-			interface.inspector_editor.scroll_vertical += (
-				matching_property.global_position.y + scroll_offset
-				- interface.inspector_editor.global_position.y
-				- interface.inspector_editor.size.y / 2.0
-			)
-		else:
-			interface.inspector_editor.ensure_control_visible(matching_property)
+		for property: EditorProperty in all_properties.filter(predicate_first):
+			# Unfold parent sections recursively if necessary.
+			var current_parent := property.get_parent()
+			const MAX_ITERATION_COUNT := 10
+			for i in MAX_ITERATION_COUNT:
+				if current_parent.get_class() == "EditorInspectorSection":
+					current_parent.unfold()
+				current_parent = current_parent.get_parent()
+				if current_parent == interface.inspector_editor:
+					break
+			if do_center:
+				interface.inspector_editor.scroll_vertical += (
+					property.global_position.y + scroll_offset
+					- interface.inspector_editor.global_position.y
+					- interface.inspector_editor.size.y / 2.0
+				)
+			else:
+				interface.inspector_editor.ensure_control_visible(property)
 
 		var dimmer := ensure_get_dimmer_for(interface.inspector_dock)
 		var rect_getter := func inspector_property_rect_getter() -> Rect2:
 			all_properties = interface.inspector_editor.find_children("", "EditorProperty", true, false)
-			var matching_property_index := all_properties.find_custom(predicate_name_matches)
-			if matching_property_index < 0:
-				return Rect2()
-			var editor_property: EditorProperty = all_properties[matching_index]
-			if editor_property.is_visible_in_tree():
-				var rect := editor_property.get_global_rect()
-				rect.position.x = interface.inspector_editor.global_position.x
-				rect.size.x = interface.inspector_editor.size.x
-				return rect.intersection(interface.inspector_editor.get_global_rect())
+			for property: EditorProperty in all_properties.filter(predicate_first):
+				if property.is_visible_in_tree():
+					var rect := property.get_global_rect()
+					rect.position.x = interface.inspector_editor.global_position.x
+					rect.size.x = interface.inspector_editor.size.x
+					return rect.intersection(interface.inspector_editor.get_global_rect())
 			return Rect2()
-
 		add_highlight_to_control.call_deferred(interface.inspector_editor, rect_getter, play_flash, true)
 
 

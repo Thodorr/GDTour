@@ -34,7 +34,7 @@ msgstr "Închideți turul?"
 msgid "Your progress will be lost."
 msgstr "Progresul tău va fi pierdut."
 
-msgid "Welcome to GDTour!"
+msgid "Welcome to Godot Tour!"
 msgstr "Bun venit la Turul Godot!"
 
 msgid "START LEARNING"
