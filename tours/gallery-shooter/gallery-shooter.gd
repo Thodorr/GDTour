@@ -17,9 +17,9 @@ const ICONS_MAP = {
 	script_signal_connected = "res://addons/godot_tours/bubble/assets/icons/Signals.svg",
 	script = "res://addons/godot_tours/bubble/assets/icons/ScriptCreate.svg",
 	timer = "res://addons/godot_tours/bubble/assets/icons/Timer.svg",
-	target = "res://gallery_shooter/assets/asteroid.png",
-	crosshair = "res://gallery_shooter/assets/crosshair.png",
-	zone = "res://gallery_shooter/assets/background/bg-preview.png",
+	target = "res://tours/gallery-shooter/assets/asteroid.png",
+	crosshair = "res://tours/gallery-shooter/assets/crosshair.png",
+	zone = "res://tours/gallery-shooter/assets/background/bg-preview-big.png",
 	animation = "res://addons/godot_tours/bubble/assets/icons/AnimationPlayer.svg",
 	group = "res://addons/godot_tours/bubble/assets/icons/Group.svg",
 	loop = "res://addons/godot_tours/bubble/assets/icons/Loop.svg",
@@ -439,8 +439,8 @@ func section_04_target_creation() -> void:
 	bubble_move_and_anchor(interface.canvas_item_editor, Bubble.At.CENTER)
 	bubble_set_avatar_at(Bubble.AvatarAt.CENTER)
 	bubble_set_title("Creating the Target")
-	#if FileAccess.file_exists("res://tours/gallery-shooter-guide/assets/target.png"):
-		#bubble_add_texture(preload("res://tours/gallery-shooter-guide/assets/target.png"), 300.0)
+	if FileAccess.file_exists(ICONS_MAP.target):
+		bubble_add_texture(preload(ICONS_MAP.target), 300.0)
 	bubble_add_text([
 		"Now let's create the targets that players will shoot at.",
 		"",
@@ -463,7 +463,7 @@ func section_04_target_creation() -> void:
 		"Right-click on the 'scenes' folder and select '[b]Create New → Scene[/b]'.",
 		"In the dialog, choose 'Area2D' and name it 'target'.",
 		"",
-		"Area2D is perfect for detecting mouse interactions without physical collision."
+		"We use an Area2D to detect mouse interactions."
 	])
 	bubble_add_task(
 		"Create a new scene called 'target' in the scenes folder",
@@ -475,7 +475,7 @@ func section_04_target_creation() -> void:
 
 	# Set up target structure
 	scene_open("res://gallery_shooter/scenes/target.tscn")
-	highlight_controls([interface.scene_dock])
+	highlight_controls([interface.scene_dock, interface.scene_dock_button_add])
 	bubble_move_and_anchor(interface.scene_dock, Bubble.At.TOP_LEFT, 16.0, Vector2(300, 50))
 	bubble_set_title("Target Scene Setup")
 	bubble_add_text([
@@ -493,11 +493,13 @@ func section_04_target_creation() -> void:
 		1,
 		func(task: Task) -> int:
 			var scene_root = EditorInterface.get_edited_scene_root()
-			if scene_root and scene_root.name == "Target":
-				var has_sprite = scene_root.find_child("Sprite2D") != null
-				var has_collision = scene_root.find_child("CollisionShape2D") != null
-				var has_animation = scene_root.find_child("AnimationPlayer") != null
-				return 1 if has_sprite and has_collision and has_animation else 0
+			if scene_root:
+				var correct_scene = scene_root.name == "Target" or scene_root.name == "Area2D"
+				if correct_scene:
+					var has_sprite = scene_root.find_child("Sprite2D") != null
+					var has_collision = scene_root.find_child("CollisionShape2D") != null
+					var has_animation = scene_root.find_child("AnimationPlayer") != null
+					return 1 if has_sprite and has_collision and has_animation else 0
 			return 0
 	)
 	complete_step()
@@ -513,7 +515,7 @@ func section_04_target_creation() -> void:
 		"",
 		"In the Inspector, find the '[b]Texture[/b]' property and load your target image.",
 		"",
-		"Choose an image that represents what players will shoot at (like a bullseye, enemy, or object)."
+		"Choose an image that represents what players will shoot at."
 	])
 	bubble_add_task(
 		"Add a texture to the Sprite2D node",
@@ -538,7 +540,7 @@ func section_04_target_creation() -> void:
 		"",
 		"In the Inspector, find the '[b]Shape[/b]' property and create a '[b]New RectangleShape2D[/b]' or '[b]New CircleShape2D[/b]'.",
 		"",
-		"Size it to match your target sprite - this defines the clickable area."
+		"Size it to match your target sprite as this defines the clickable area."
 	])
 	bubble_add_task(
 		"Configure the CollisionShape2D with a shape",
@@ -562,7 +564,7 @@ func section_04_target_creation() -> void:
 	bubble_add_text([
 		"Now add a script to handle target behavior.",
 		"",
-		"Right-click on the [b]Target[/b] node and select '[b]Attach Script[/b]' %s." % bbcode_generate_icon_image_string(ICONS_MAP.script),
+		"Press the attach script button %s or right-click on the [b]Target[/b] node and select '[b]Attach Script[/b]'." % bbcode_generate_icon_image_string(ICONS_MAP.script),
 		"Save the script as 'target.gd' in the scripts folder."
 	])
 	bubble_add_task(
@@ -589,7 +591,7 @@ func section_04_target_creation() -> void:
 	bubble_set_title("Basic Target Script")
 	bubble_add_text([
 		"Replace the default script with this target code:",
-		""
+		"",
 	])
 	bubble_add_code([
 "extends Area2D
@@ -629,7 +631,7 @@ func _unhandled_input(event):
 	# Connect signals
 	context_set_2d()
 	highlight_scene_nodes_by_name(["Target"])
-	highlight_controls([interface.inspector_dock])
+	highlight_controls([interface.inspector_dock, interface.node_dock_signals_button, interface.node_dock_signals_editor, interface.signals_dialog])
 	bubble_move_and_anchor(interface.inspector_dock, Bubble.At.TOP_LEFT, 16, Vector2(-550, 0))
 	bubble_set_title("Connect Mouse Signals")
 	bubble_add_text([
@@ -638,7 +640,7 @@ func _unhandled_input(event):
 		"Select the Target node, then in the Inspector:",
 		"1. Click on the '[b]Node[/b]' tab (next to Inspector)",
 		"2. Find 'mouse_entered' signal and double-click it",
-		"3. Connect it to '_on_mouse_entered' method",
+		"3. Connect it to '_on_mouse_entered' method - it should be chosen by default",
 		"4. Do the same for 'mouse_exited' → '_on_mouse_exited'",
 		"",
 		"This enables hover detection for our targets."
@@ -649,22 +651,22 @@ func section_05_target_animations() -> void:
 	bubble_move_and_anchor(interface.canvas_item_editor, Bubble.At.CENTER)
 	bubble_set_avatar_at(Bubble.AvatarAt.CENTER)
 	bubble_set_title("Target Animations")
-	#if FileAccess.file_exists("res://tours/gallery-shooter-guide/assets/animation_example.png"):
-		#bubble_add_texture(preload("res://tours/gallery-shooter-guide/assets/animation_example.png"), 300.0)
 	bubble_add_text([
 		"Now we'll create movement patterns for our targets using the AnimationPlayer.",
 		"",
 		"We'll create different animations:",
-		"• Straight movement (left to right, right to left)",
+		"• Straight movement (horizontal and vertical)",
 		"• Wave patterns for more challenging targets",
-		"• Vertical movement patterns"
 	])
 	complete_step()
 
 	# Open target scene and focus on AnimationPlayer
+	var animation_editor = interface.logger.get_parent().get_parent().get_children()[0].get_children()[9]
+	print(interface.logger.get_parent().get_parent().get_children()[0].get_children())
+	var spriteframes_editor_button = interface.bottom_buttons_container.get_children()[9]
 	scene_open("res://gallery_shooter/scenes/target.tscn")
 	highlight_scene_nodes_by_name(["AnimationPlayer"])
-	highlight_controls([interface.animation_player])
+	highlight_controls([interface.animation_player, ])
 	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Animation Player Setup")
 	bubble_add_text([

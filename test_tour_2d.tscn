@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://5i4evf7vukd1"]
+[gd_scene load_steps=8 format=3 uid="uid://dr2jpbe7vtbb3"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ras30"]
 load_path = "res://.godot/imported/obstacle.png-a9d8da6c957573aba9b0aa2de68d72f0.ctex"
