@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_fda6m")
-title = "Gallery Shooter"
+title = "Gallery Shooter Guide"
 is_free = true
 is_locked = false
 tour_path = "uid://dtko5mbebl07d"

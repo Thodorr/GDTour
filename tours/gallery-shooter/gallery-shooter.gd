@@ -24,6 +24,10 @@ const ICONS_MAP = {
 	group = "res://addons/godot_tours/bubble/assets/icons/Group.svg",
 	loop = "res://addons/godot_tours/bubble/assets/icons/Loop.svg",
 	autoplay = "res://addons/godot_tours/bubble/assets/icons/AutoPlay.svg",
+	time = "res://addons/godot_tours/bubble/assets/icons/Time.svg",
+	keyframe = "res://addons/godot_tours/bubble/assets/icons/KeyBezierPoint.svg",
+	key = "res://addons/godot_tours/bubble/assets/icons/Key.svg",
+	cubic = "res://addons/godot_tours/bubble/assets/icons/InterpCubic.svg"
 }
 
 func _build() -> void:
@@ -38,13 +42,13 @@ func _build() -> void:
 	)
 
 	# Tour sections
-	section_01_introduction()
-	section_02_project_setup()
-	section_03_main_game_scene()
-	section_04_target_creation()
-	section_05_target_animations()
-	section_06_spawning_system()
-	section_07_input_system()
+	#section_01_introduction()
+	#section_02_project_setup()
+	#section_03_main_game_scene()
+	#section_04_target_creation()
+	#section_05_target_animations()
+	#section_06_spawning_system()
+	#section_07_input_system()
 	section_08_polishing()
 	section_09_conclusion()
 
@@ -439,8 +443,8 @@ func section_04_target_creation() -> void:
 	bubble_move_and_anchor(interface.canvas_item_editor, Bubble.At.CENTER)
 	bubble_set_avatar_at(Bubble.AvatarAt.CENTER)
 	bubble_set_title("Creating the Target")
-	if FileAccess.file_exists(ICONS_MAP.target):
-		bubble_add_texture(preload(ICONS_MAP.target), 300.0)
+	if FileAccess.file_exists("res://tours/gallery-shooter/assets/asteroid_big.png"):
+		bubble_add_texture(preload("res://tours/gallery-shooter/assets/asteroid_big.png"), 300.0)
 	bubble_add_text([
 		"Now let's create the targets that players will shoot at.",
 		"",
@@ -485,8 +489,6 @@ func section_04_target_creation() -> void:
 		"[code]├── Sprite2D[/code]",
 		"[code]├── CollisionShape2D[/code]",
 		"[code]└── AnimationPlayer[/code]",
-		"",
-		"Each node serves a specific purpose for our target functionality."
 	])
 	bubble_add_task(
 		"Add Sprite2D, CollisionShape2D, and AnimationPlayer as children of Target",
@@ -609,17 +611,19 @@ func _on_mouse_exited():
 
 func _unhandled_input(event):
 	if event.is_action_pressed('ui_accept') && hovering:
-		emit_signal('time_added', difficulty)
+		time_added.emit(difficulty)
 		queue_free()"
 	])
 	complete_step()
 
 	# Explain the target script
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Understanding Target Code")
 	bubble_add_text([
 		"Let's break down the key parts:",
 		"",
-		"[b]signal time_added[/b] - Sends a signal when the target is shot",
+		"[b]signal time_added[/b] - Creates a signal",
+		"[b]time_added.emit(difficulty)[/b] - Emits the signal with arguments",
 		"[b]var hovering[/b] - Tracks if the mouse is over the target",
 		"[b]var difficulty[/b] - Point value when the target is hit",
 		"[b]_on_mouse_entered/exited[/b] - Detects mouse hover",
@@ -631,14 +635,14 @@ func _unhandled_input(event):
 	# Connect signals
 	context_set_2d()
 	highlight_scene_nodes_by_name(["Target"])
-	highlight_controls([interface.inspector_dock, interface.node_dock_signals_button, interface.node_dock_signals_editor, interface.signals_dialog])
+	highlight_controls([interface.node_dock_signals_button, interface.node_dock_signals_editor, interface.signals_dialog, interface.signals_dialog_ok_button, interface.inspector_tabs])
 	bubble_move_and_anchor(interface.inspector_dock, Bubble.At.TOP_LEFT, 16, Vector2(-550, 0))
 	bubble_set_title("Connect Mouse Signals")
 	bubble_add_text([
 		"We need to connect the Area2D's mouse signals to our script functions.",
 		"",
 		"Select the Target node, then in the Inspector:",
-		"1. Click on the '[b]Node[/b]' tab (next to Inspector)",
+		"1. Click on the 'Node' tab (next to Inspector)",
 		"2. Find 'mouse_entered' signal and double-click it",
 		"3. Connect it to '_on_mouse_entered' method - it should be chosen by default",
 		"4. Do the same for 'mouse_exited' → '_on_mouse_exited'",
@@ -652,21 +656,20 @@ func section_05_target_animations() -> void:
 	bubble_set_avatar_at(Bubble.AvatarAt.CENTER)
 	bubble_set_title("Target Animations")
 	bubble_add_text([
-		"Now we'll create movement patterns for our targets using the AnimationPlayer.",
+		"Now we'll create movement patterns for our targets using the [b]AnimationPlayer[/b].",
 		"",
 		"We'll create different animations:",
 		"• Straight movement (horizontal and vertical)",
-		"• Wave patterns for more challenging targets",
+		"• A Wave pattern for more challenging targets",
 	])
 	complete_step()
 
 	# Open target scene and focus on AnimationPlayer
-	var animation_editor = interface.logger.get_parent().get_parent().get_children()[0].get_children()[9]
-	print(interface.logger.get_parent().get_parent().get_children()[0].get_children())
-	var spriteframes_editor_button = interface.bottom_buttons_container.get_children()[9]
+	var animation_editor = interface.logger.get_parent().get_parent().get_children()[0].get_children()[2]
+	var animation_editor_button = interface.bottom_buttons_container.get_children()[4]
 	scene_open("res://gallery_shooter/scenes/target.tscn")
 	highlight_scene_nodes_by_name(["AnimationPlayer"])
-	highlight_controls([interface.animation_player, ])
+	highlight_controls([interface.animation_player, animation_editor, animation_editor_button])
 	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Animation Player Setup")
 	bubble_add_text([
@@ -680,64 +683,69 @@ func section_05_target_animations() -> void:
 
 	# Create first animation
 	highlight_controls([interface.animation_player])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Create Straight Right Animation")
 	bubble_add_text([
-		"Let's create our first animation - a target moving from left to right.",
+		"Let's create our first animation: A target moving from left to right.",
 		"",
-		"1. In the Animation panel, click '[b]Animation[/b]' → '[b]New...[/b]'",
+		"1. In the Animation panel, click [b]'Animation' → 'New...'[/b]",
 		"2. Name it 'straight_right'",
-		"3. Set the length to 1 second",
-		"",
-		"This will be our basic horizontal movement pattern."
+		"3. Set the length to 1 second %s"  % bbcode_generate_icon_image_string(ICONS_MAP.time),
 	])
 	complete_step()
 
 	# Explain keyframes
-	highlight_controls([interface.animation_player, interface.canvas_item_editor])
+	highlight_controls([interface.animation_player])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Understanding Keyframes")
 	bubble_add_text([
-		"Keyframes define specific values at specific times in the animation.",
+		" %s [b]Keyframes[/b] define specific values at specific times in the animation."  % bbcode_generate_icon_image_string(ICONS_MAP.keyframe),
 		"",
 		"For position animation:",
 		"• At 0.0 seconds: Target starts at one position",
 		"• At 1.0 seconds: Target ends at another position",
 		"• Godot smoothly moves between these points",
 		"",
-		"We'll set keyframes for the Target's position property."
+		"We'll set %s [b]Keyframes[/b] for the Target's position property."  % bbcode_generate_icon_image_string(ICONS_MAP.keyframe)
 	])
 	complete_step()
 
 	# Create position keyframes
 	highlight_scene_nodes_by_name(["Target"])
-	highlight_controls([interface.animation_player, interface.inspector_dock, interface.canvas_item_editor])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
+	highlight_controls([interface.animation_player, interface.inspector_dock])
 	bubble_set_title("Create Position Keyframes")
 	bubble_add_text([
-		"Now let's create the keyframes for straight_right movement:",
+		"Now let's create the %s [b]Keyframes[/b] for straight_right movement:" % bbcode_generate_icon_image_string(ICONS_MAP.keyframe),
 		"",
 		"1. Make sure the timeline is at 0:00",
 		"2. Select the [b]Target[/b] node",
 		"3. In the Inspector, find the '[b]Position[/b]' property",
 		"4. Set position to Vector2(0, 0)",
-		"5. Click the key button next to Position to create a keyframe",
+		"5. Click the %s [b]key[/b] button next to Position to create a keyframe" % bbcode_generate_icon_image_string(ICONS_MAP.key),
 		"",
 		"This sets the starting position."
 	])
 	complete_step()
 
+	highlight_scene_nodes_by_name(["Target"])
+	highlight_controls([interface.animation_player, interface.inspector_dock])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Create End Position")
 	bubble_add_text([
 		"Now for the end position:",
 		"",
 		"1. Move the timeline to 1:00 (1 second)",
 		"2. Change the Target's position to Vector2(1200, 0)",
-		"3. Click the key button again to create the end keyframe",
+		"3. Click the %s [b]key[/b] button again" % bbcode_generate_icon_image_string(ICONS_MAP.key),
 		"",
 		"The target will now move 1200 pixels to the right over 1 second."
 	])
 	complete_step()
 
 	# Test the animation
-	highlight_controls([interface.animation_player])
+	highlight_controls([interface.animation_player, interface.canvas_item_editor])
+	bubble_move_and_anchor(interface.canvas_item_editor, bubble.At.TOP_RIGHT)
 	bubble_set_title("Test the Animation")
 	bubble_add_text([
 		"Test your animation by clicking the play button in the Animation panel.",
@@ -745,44 +753,27 @@ func section_05_target_animations() -> void:
 		"You should see the target smoothly move from left to right.",
 		"",
 		"If it doesn't work, check that:",
-		"• Both keyframes are created",
+		"• Both %s [b]Keyframes[/b] are created" % bbcode_generate_icon_image_string(ICONS_MAP.keyframe),
 		"• The timeline length is 1 second",
 		"• The positions are set correctly"
 	])
 	complete_step()
 
 	# Create more animations
+	highlight_scene_nodes_by_name(["Target"])
+	highlight_controls([interface.animation_player, interface.inspector_dock, interface.canvas_item_editor])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
 	bubble_set_title("Create Additional Animations")
 	bubble_add_text([
-		"Let's create more movement patterns. Create these animations:",
+		"Let's create the left to right movement pattern. Create this animation:",
 		"",
 		"[b]straight_left:[/b]",
 		"• Length: 1 second",
 		"• 0s: Vector2(0, 0)",
 		"• 1s: Vector2(-1200, 0)",
-		"",
-		"[b]wave_right:[/b]",
-		"• Length: 1 second",
-		"• Multiple keyframes for wavy movement"
-	])
-	complete_step()
-
-	# Detailed wave animation
-	bubble_set_title("Wave Animation Details")
-	bubble_add_text([
-		"For the wave_right animation, create these keyframes:",
-		"",
-		"• 0.0s: Vector2(0, 0)",
-		"• 0.2s: Vector2(200, 150)",
-		"• 0.4s: Vector2(400, -150)", 
-		"• 0.6s: Vector2(600, 150)",
-		"• 0.8s: Vector2(800, -150)",
-		"• 1.0s: Vector2(1100, 150)",
-		"",
-		"This creates a zigzag pattern that's harder to hit!"
 	])
 	bubble_add_task(
-		"Create at least 'straight_right' and 'straight_left' animations",
+		"Create the 'straight_right' and 'straight_left' animations",
 		1,
 		func(task: Task) -> int:
 			var scene_root = EditorInterface.get_edited_scene_root()
@@ -794,6 +785,39 @@ func section_05_target_animations() -> void:
 						var has_right = anim_library.has_animation("straight_right")
 						var has_left = anim_library.has_animation("straight_left")
 						return 1 if has_right and has_left else 0
+			return 0
+	)
+	complete_step()
+
+	# Detailed wave animation
+	highlight_scene_nodes_by_name(["Target"])
+	highlight_controls([interface.animation_player, interface.inspector_dock, interface.canvas_item_editor])
+	bubble_move_and_anchor(interface.animation_player, Bubble.At.TOP_CENTER, 16, Vector2(0, -600))
+	bubble_set_title("Wave Animation Details")
+	bubble_add_text([
+		"For the wave_right animation, create these keyframes:",
+		"",
+		"• 0.0s: Vector2(0, 0)",
+		"• 0.2s: Vector2(200, 150)",
+		"• 0.4s: Vector2(400, -150)", 
+		"• 0.6s: Vector2(600, 150)",
+		"• 0.8s: Vector2(800, -150)",
+		"• 1.0s: Vector2(1200, 150)",
+		"",
+		"To create a more fluid movement you can change the interpolation mode to &s 'Cubic' to the right of your position keyframe timeline." % bbcode_generate_icon_image_string(ICONS_MAP.cubic),
+	])
+	bubble_add_task(
+		"Create the 'wave_right' animation",
+		1,
+		func(task: Task) -> int:
+			var scene_root = EditorInterface.get_edited_scene_root()
+			if scene_root:
+				var anim_player = scene_root.find_child("AnimationPlayer")
+				if anim_player != null:
+					var anim_library = anim_player.get_animation_library("")
+					if anim_library != null:
+						var has_wave = anim_library.has_animation("wave_right")
+						return 1 if has_wave else 0
 			return 0
 	)
 	complete_step()
@@ -852,6 +876,7 @@ func section_06_spawning_system() -> void:
 	complete_step()
 
 	# Add spawn function
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Create Spawn Function")
 	bubble_add_text([
 		"Add this function to create new targets:",
@@ -859,9 +884,11 @@ func section_06_spawning_system() -> void:
 	])
 	bubble_add_code([
 "func create_spawn():
+	var new_spawn = Marker2D.new()
 	var new_target = target_scene.instantiate()
-	add_child(new_target)
-	new_target.connect('time_added', _on_time_added)
+	add_child(new_spawn)
+	new_spawn.add_child(new_target)
+	new_target.time_added.connect(_on_time_added)
 	
 	# Play animation
 	var anim_player = new_target.get_node('AnimationPlayer')
@@ -873,14 +900,18 @@ func section_06_spawning_system() -> void:
 	bubble_add_text([
 		"",
 		"This function:",
+		"• Creates a marker node as a spawn point",
 		"• Creates a new target instance",
 		"• Adds it to the scene",
 		"• Connects its signal to our zone",
-		"• Starts the animation with random speed"
+		"• Starts the animation with random speed",
+		"",
+		"The addition of a spawner is necessary since the animation player overwrites the position of the targets.",
 	])
 	complete_step()
 
 	# Add timer signal handler
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Add Timer Signal Handler")
 	bubble_add_text([
 		"Add this function to handle when the DelayTimer times out:",
@@ -897,6 +928,7 @@ func section_06_spawning_system() -> void:
 	complete_step()
 
 	# Add time added handler
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Add Time Added Handler")
 	bubble_add_text([
 		"Add this function to handle when targets are shot:",
@@ -913,16 +945,15 @@ func section_06_spawning_system() -> void:
 	complete_step()
 
 	# Connect DelayTimer signal
-	context_set_2d()
 	highlight_scene_nodes_by_name(["DelayTimer"])
-	highlight_controls([interface.inspector_dock])
+	highlight_controls([interface.node_dock_signals_button, interface.node_dock_signals_editor, interface.signals_dialog, interface.signals_dialog_ok_button, interface.inspector_tabs])
 	bubble_move_and_anchor(interface.inspector_dock, Bubble.At.TOP_LEFT, 16, Vector2(-550, 0))
 	bubble_set_title("Connect DelayTimer Signal")
 	bubble_add_text([
 		"We need to connect the DelayTimer's timeout signal.",
 		"",
 		"Select the [b]DelayTimer[/b] node, then:",
-		"1. Go to the '[b]Node[/b]' tab in the Inspector",
+		"1. Go to the 'Node' tab in the Inspector",
 		"2. Find the 'timeout' signal",
 		"3. Double-click it and connect to '_on_delay_timer_timeout'",
 		"",
@@ -932,6 +963,7 @@ func section_06_spawning_system() -> void:
 
 	# Start the delay timer
 	context_set_script()
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Start the DelayTimer")
 	bubble_add_text([
 		"Update your _ready() function to also start the DelayTimer:",
@@ -950,6 +982,7 @@ func section_06_spawning_system() -> void:
 	complete_step()
 
 	# Add positional spawning
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Add Positional Variation")
 	bubble_add_text([
 		"Let's make targets spawn at different heights. Update your create_spawn function:",
@@ -957,12 +990,14 @@ func section_06_spawning_system() -> void:
 	])
 	bubble_add_code([
 "func create_spawn():
+	var new_spawn = Marker2D.new()
 	var new_target = target_scene.instantiate()
-	add_child(new_target)
-	new_target.connect('time_added', _on_time_added)
+	add_child(new_spawn)
+	new_spawn.add_child(new_target)
+	new_target.time_added.connect(_on_time_added)
 	
 	# Set random spawn position
-	new_target.position = Vector2(-60, randf_range(30, 600))
+	new_spawn.position = Vector2(-30, randf_range(30, 600))
 	
 	# Play animation
 	var anim_player = new_target.get_node('AnimationPlayer')
@@ -1012,7 +1047,7 @@ func section_07_input_system() -> void:
 	bubble_set_avatar_at(Bubble.AvatarAt.CENTER)
 	bubble_set_title("Setting Up Mouse Input")
 	bubble_add_text([
-		"Currently our targets respond to keyboard input (ui_accept). Let's change this to mouse clicks for a proper gallery shooter experience.",
+		"Currently our targets respond to keyboard input (ui_accept). Let's change this to mouse clicks.",
 		"",
 		"We'll:",
 		"• Create a custom input action for mouse clicks",
@@ -1031,35 +1066,19 @@ func section_07_input_system() -> void:
 		"1. In the menu bar, click '[b]Project → Project Settings[/b]'",
 		"2. Click on the '[b]Input Map[/b]' tab",
 		"",
-		"The Input Map lets you define custom controls for your game."
-	])
-	complete_step()
-
-	# Create mouse input action
-	bubble_set_title("Create Mouse Input Action")
-	bubble_add_text([
 		"In the Input Map, create a new action:",
-		"",
 		"1. Find the '[b]Add New Action[/b]' field at the top",
 		"2. Type 'mouse_left' in this field",
 		"3. Click the '[b]+ Add[/b]' button",
 		"",
-		"This creates a new input action we can reference in code."
-	])
-	complete_step()
-
-	# Assign mouse button
-	bubble_set_title("Assign Left Mouse Button")
-	bubble_add_text([
 		"Now assign the left mouse button to this action:",
-		"",
 		"1. Find your new 'mouse_left' action in the list",
 		"2. Click the '[b]+[/b]' button next to it",
 		"3. Select '[b]Mouse Button[/b]' from the menu",
 		"4. Choose '[b]Left Mouse Button[/b]'",
-		"5. Click '[b]Close[/b]' to finish",
+		"5. Click '[b]OK[/b]' to finish",
 		"",
-		"Now we can use 'mouse_left' in our scripts to detect clicks!"
+		"This creates a new input action we can reference in code."
 	])
 	complete_step()
 
@@ -1078,17 +1097,27 @@ func section_07_input_system() -> void:
 	bubble_add_text([
 		"Update the _unhandled_input function in your target script:",
 		"",
-		"Change this line:",
-		"[code]if event.is_action_pressed('ui_accept') && hovering:[/code]",
+		"Change this line:"
+	])
+	bubble_add_code([
+		"if event.is_action_pressed('ui_accept') && hovering:"
+	])
+	bubble_add_text([
 		"",
-		"To this:",
-		"[code]if event.is_action_pressed('mouse_left') && hovering:[/code]",
+		"To this:"
+	])
+	bubble_add_code([
+		"if event.is_action_pressed('mouse_left') && hovering:"
+	])
+	bubble_add_text([
 		"",
 		"Now targets will respond to left mouse clicks instead of keyboard presses!"
 	])
 	complete_step()
+	complete_step()
 
 	# Test mouse input
+	highlight_controls([interface.run_bar_play_button])
 	bubble_set_title("Test Mouse Shooting")
 	bubble_add_text([
 		"Save your script and test the mouse input:",
@@ -1136,7 +1165,6 @@ func section_08_polishing() -> void:
 		"• Custom mouse cursor (crosshair)",
 		"• Game over detection",
 		"• Improved target variety",
-		"• Performance optimizations"
 	])
 	complete_step()
 
@@ -1150,14 +1178,14 @@ func section_08_polishing() -> void:
 		"1. Open '[b]Project → Project Settings[/b]'",
 		"2. Go to '[b]General → Display → Mouse Cursor[/b]'",
 		"3. Set '[b]Custom Image[/b]' to your crosshair texture",
-		"4. Adjust '[b]Custom Image Hotspot[/b]' if needed",
-		"",
-		"This replaces the default arrow with a crosshair!"
+		"4. Adjust '[b]Custom Image Hotspot[/b]' if needed (this is the point where the click happens)",
 	])
 	complete_step()
 
 	# Improve target variety
 	context_set_script()
+	highlight_controls([interface.script_editor_code_panel])
+	bubble_move_and_anchor(interface.script_editor_code_panel,Bubble.At.TOP_RIGHT)
 	scene_open("res://gallery_shooter/scenes/zone.tscn")
 	queue_command(func():
 		var script_path = "res://gallery_shooter/scripts/zone.gd"
@@ -1172,16 +1200,21 @@ func section_08_polishing() -> void:
 	])
 	bubble_add_code([
 "func create_spawn():
+	var new_spawn = Marker2D.new()
 	var new_target = target_scene.instantiate()
-	add_child(new_target)
-	new_target.connect('time_added', _on_time_added)
-	
-	# Set random spawn position
-	new_target.position = Vector2(-60, randf_range(30, 600))
+	add_child(new_spawn)
+	new_spawn.add_child(new_target)
+	new_target.time_added.connect(_on_time_added)
 	
 	# Choose random animation
 	var animations = ['straight_right', 'straight_left', 'wave_right']
 	var chosen_anim = animations[randi() % animations.size()]
+	
+	# Set random spawn position
+	if chosen_anim.contains('left'):
+		new_spawn.position = Vector2(1180, randf_range(30, 600))
+	else:
+		new_spawn.position = Vector2(-30, randf_range(30, 600))
 	
 	var anim_player = new_target.get_node('AnimationPlayer')
 	anim_player.play(chosen_anim)
@@ -1189,11 +1222,12 @@ func section_08_polishing() -> void:
 	])
 	bubble_add_text([
 		"",
-		"This randomly selects from available animations for more variety!"
+		"This randomly selects from available animations and changes the starting postion based on it."
 	])
 	complete_step()
 
 	# Add game over detection
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Add Game Over Detection")
 	bubble_add_text([
 		"Add a game over system when the timer runs out:",
@@ -1206,7 +1240,7 @@ func section_08_polishing() -> void:
 	$CanvasLayer/Label.text = str(int(time_left))
 	
 	# Check for game over
-	if time_left <= 0 and not $WorldTimer.is_stopped():
+	if time_left <= 0:
 		game_over()
 
 func game_over():
@@ -1214,12 +1248,15 @@ func game_over():
 	$CanvasLayer/Label.text = \"GAME OVER\"
 	# Remove all remaining targets
 	for child in get_children():
-		if child.name.begins_with(\"Target\"):
+		if child.name.contains('Marker2D'):
 			child.queue_free()"
 	])
 	complete_step()
 
 	# Target cleanup
+	scene_open("res://gallery_shooter/scenes/target.tscn")
+	highlight_scene_nodes_by_name(["AnimationPlayer"])
+	highlight_controls([interface.script_editor_code_panel, interface.node_dock_signals_button, interface.node_dock_signals_editor, interface.signals_dialog, interface.signals_dialog_ok_button, interface.inspector_tabs])
 	bubble_set_title("Add Target Cleanup")
 	bubble_add_text([
 		"Targets that move off-screen should be removed to save memory.",
@@ -1228,22 +1265,45 @@ func game_over():
 		""
 	])
 	bubble_add_code([
-"func _ready():
-	# Auto-remove after animation completes
-	var timer = Timer.new()
-	timer.wait_time = 2.0  # Adjust based on animation length
-	timer.one_shot = true
-	timer.timeout.connect(queue_free)
-	add_child(timer)
-	timer.start()"
+"func _on_animation_player_animation_finished(_anim_name):
+	get_parent().queue_free()"
 	])
 	bubble_add_text([
 		"",
-		"This automatically removes targets after 2 seconds, preventing memory leaks."
+		"This automatically removes targets with their spawner when their movement animation completes.",
+		"",
+		"Don't forget to connect the AnimationPlayer's 'animation_finished' signal to this function in the Node tab of the Inspector."
 	])
+	complete_step()
+	
+	# Configure background
+	scene_open("res://gallery_shooter/scenes/zone.tscn")
+	highlight_controls([interface.inspector_dock, interface.scene_dock, interface.canvas_item_editor])
+	bubble_move_and_anchor(interface.inspector_dock, Bubble.At.TOP_LEFT, 16, Vector2(-550, 0))
+	bubble_set_title("Configure Background")
+	bubble_add_text([
+		"At last, add a background to the game. Add a Sprite2D node to the zone and configure it:",
+		"",
+		"1. In the Inspector, set the '[b]Texture[/b]' to your background image",
+		"2. Position and scale it to cover the entire screen",
+	])
+	bubble_add_task(
+		"Add a texture to the background Sprite2D",
+		1,
+		func(task: Task) -> int:
+			var scene_root = EditorInterface.get_edited_scene_root()
+			if scene_root:
+				var sprite_node = scene_root.find_child("Sprite2D")
+				if sprite_node != null:
+					var texture = sprite_node.get("texture")
+					return 1 if texture != null else 0
+			return 0
+	)
 	complete_step()
 
 	# Difficulty scaling
+	context_set_script()
+	highlight_controls([interface.script_editor_code_panel])
 	bubble_set_title("Add Difficulty Scaling (Optional)")
 	bubble_add_text([
 		"Make the game progressively harder by decreasing spawn time:",
@@ -1307,16 +1367,14 @@ func section_09_conclusion() -> void:
 		"Here are some ways you could expand your gallery shooter:",
 		"",
 		"[b]Gameplay Features:[/b]",
-		"• Add a score system and high scores",
 		"• Create different target types with varying point values",
 		"• Add power-ups that appear occasionally",
-		"• Implement moving backgrounds",
 		"",
 		"[b]Visual & Audio:[/b]",
 		"• Add sound effects for shooting and hits",
 		"• Create particle effects when targets are destroyed",
 		"• Add background music",
-		"• Improve target graphics and animations"
+		"• Add more animation variety"
 	])
 	complete_step()
 
@@ -1343,7 +1401,7 @@ func section_09_conclusion() -> void:
 	bubble_add_text([
 		bbcode_wrap_font_size("[center][b]🎯 Tutorial Complete! 🎯[/b][/center]", 32),
 		"",
-		"[center]You now have experience with timer systems, input handling, and game object management![/center]",
+		"[center]You now have experience with the signal system, input handling, game object management and most importantly the animation player![/center]",
 		"[center]Keep practicing and building more games to improve your skills.[/center]",
 		"",
 		"[center][b]Happy Game Development![/b][/center]"

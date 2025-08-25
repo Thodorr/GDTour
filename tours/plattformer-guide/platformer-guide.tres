@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://dnpq3w453fgfg"]
 
-[ext_resource type="Script" uid="uid://2ay3ya3sq3pp" path="res://addons/godot_tours/godot_tour_entry.gd" id="1_g6y5e"]
+[ext_resource type="Script" uid="uid://cu47whb40hxkc" path="res://addons/godot_tours/godot_tour_entry.gd" id="1_g6y5e"]
 
 [resource]
 script = ExtResource("1_g6y5e")

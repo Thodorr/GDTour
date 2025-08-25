@@ -670,13 +670,13 @@ func _physics_process(delta):
 		velocity += get_gravity() * delta
 	
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
-		velocity.y = -300.0
+		velocity.y = JUMP_VELOCITY
 	
 	var direction = Input.get_axis(\"ui_left\", \"ui_right\")
 	if direction:
-		velocity.x = direction * 200.0
+		velocity.x = direction * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, 200.0)
+		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	move_and_slide()"
 	])
@@ -1207,7 +1207,7 @@ func section_05_world_creation() -> void:
 		"In the Inspector, you'll find these key properties:",
 		"• '[b]Scroll Scale[/b]' - Controls how fast the background moves (try 0.5 for half speed) but keep the 1.0 for the y-axis",
 		"• '[b]Repeat Size[/b]' - Set this to your background image's width for seamless tiling",
-		"• '[b]Repeat Time[/b]' - This is the amount of time the image gets repeated. Pick a value high enough to cover your level",
+		"• '[b]Repeat Times[/b]' - This is the amount of times the image gets repeated. Pick a value high enough to cover your level",
 		"• '[b]Autoscroll[/b]' - The speed at which the image moves on its own. Not relevant for the basic background",
 		"", 
 		"Experiment with different Scroll Scale values to get the effect you like! For a background image "

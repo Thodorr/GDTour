@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1sacfrbrycau"]
+[gd_scene load_steps=3 format=3 uid="uid://c1sacfrbrycau"]
 
 [ext_resource type="Script" uid="uid://clleinf1c30n4" path="res://gallery_shooter/scripts/zone.gd" id="1_n08rf"]
+[ext_resource type="Texture2D" uid="uid://dhqyv0qoeqe05" path="res://gallery_shooter/assets/background/bg-preview-big.png" id="2_7ha7v"]
 
 [node name="Zone" type="Node2D"]
 script = ExtResource("1_n08rf")
@@ -25,3 +26,10 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "20"
 horizontal_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(576, 324)
+scale = Vector2(1.41176, 1.35)
+texture = ExtResource("2_7ha7v")
+
+[connection signal="timeout" from="DelayTimer" to="." method="_on_delay_timer_timeout"]
