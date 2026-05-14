@@ -10,7 +10,6 @@ var alpha := 0.4: set = set_alpha
 
 @onready var mesh_instance_3d: MeshInstance3D = %MeshInstance3D
 
-
 func _ready() -> void:
 	set_size(size)
 	set_box_offset(box_offset)
