@@ -242,18 +242,18 @@ func steps_030_creating_first_scene() -> void:
 	bubble_move_and_anchor(interface.scene_dock, Bubble.At.TOP_LEFT, 16.0, Vector2(300, 50))
 	bubble_set_title(gtr("Add child nodes"))
 	bubble_add_text([
-		gtr("Now let's add some child nodes to see how the hierarchy works."),
+		gtr("Now let's add a child node to see how the hierarchy works."),
 		gtr("Right-click on the Node2D and select 'Add Child', or click the [b]+[/b] button."),
-		gtr("Try adding a [b]Sprite2D[/b] node as a child."),
+		gtr("Add a [b]Label[/b] node as a child. Then select it and change its [b]Text[/b] property in the Inspector to something of your choice."),
 	])
 	bubble_add_task(
-		gtr("Add a [b]Sprite2D[/b] as a child of Node2D"),
+		gtr("Add a [b]Label[/b] as a child of Node2D"),
 		1,
 		func(task: Task) -> int:
 			var scene_root = EditorInterface.get_edited_scene_root()
 			if scene_root:
-				var sprite_node = scene_root.find_child("Sprite2D")
-				return 1 if sprite_node != null else 0
+				var label_node = scene_root.find_child("Label")
+				return 1 if label_node != null else 0
 			return 0
 	)
 	complete_step()
@@ -264,7 +264,7 @@ func steps_030_creating_first_scene() -> void:
 	bubble_set_title(gtr("Understanding scene structure"))
 	bubble_add_text([
 		gtr("Look at the Scene Dock. You can see the hierarchy of nodes."),
-		gtr("The [b]Node2D[/b] is the root (parent), and [b]Sprite2D[/b] is its child."),
+		gtr("The [b]Node2D[/b] is the root (parent), and [b]Label[/b] is its child."),
 		gtr("You can add more children, and children can have their own children."),
 		gtr("This tree structure is how you organize all the parts of your game."),
 	])
@@ -364,9 +364,37 @@ func steps_050_scripts() -> void:
 	bubble_add_text([
 		gtr("You should see some basic code that was generated automatically."),
 		gtr("The line [code]extends Node2D[/code] tells Godot this script controls a Node2D."),
-		gtr("You can add functions here to make your node do things."),
-		gtr("Don't worry if you can't code yet, Godot uses a Python-like language called GDScript that's easy to learn!"),
+		gtr("Don't worry if you can't code yet – Godot uses a Python-like language called GDScript that's easy to learn!"),
 	])
+	complete_step()
+	
+	# Write a variable and print it
+	highlight_controls([interface.script_editor_code_panel])
+	bubble_move_and_anchor(interface.script_editor_code_panel, Bubble.At.TOP_RIGHT)
+	bubble_set_title(gtr("Write your first code"))
+	bubble_add_text([gtr("Now let's write some code. Add the following to your script:")])
+	bubble_add_code(["var punkte = 0"])
+	bubble_add_text(["Then inside [code]_ready()[/code], add:"])
+	bubble_add_code(["print(\"Punkte: \", punkte)"])
+	bubble_add_text(["[code]_ready()[/code] runs automatically when the scene starts. [code]print()[/code] writes output to the Output panel."])
+	bubble_add_text(["Remember to save by pressing [code]Ctrl + S.[/code]"])
+	
+	bubble_add_task(
+		gtr("Add a variable and a print() call in _ready()"),
+		1,
+		func(task: Task) -> int:
+			var scene_root = EditorInterface.get_edited_scene_root()
+			if scene_root == null:
+				return 0
+			var script = scene_root.get_script()
+			if script == null:
+				return 0
+			var path: String = script.resource_path
+			if path.is_empty() or not FileAccess.file_exists(path):
+				return 0
+			var content := FileAccess.get_file_as_string(path)
+			return 1 if (content.contains("var ") and content.contains("print(") and content.contains("_ready")) else 0
+	)
 	complete_step()
 
 
